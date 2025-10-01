@@ -1,0 +1,88 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\telem\u00E1tica\\Ingenier\u00EDa Web\\APOINTDATE\\apointDate\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{878E9836-A4F3-4F5B-87E9-67EFA5A0E306}|apointDate.csproj|c:\\telem\u00E1tica\\ingenier\u00EDa web\\apointdate\\apointdate\\iniciousuario.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{878E9836-A4F3-4F5B-87E9-67EFA5A0E306}|apointDate.csproj|solutionrelative:iniciousuario.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{878E9836-A4F3-4F5B-87E9-67EFA5A0E306}|apointDate.csproj|c:\\telem\u00E1tica\\ingenier\u00EDa web\\apointdate\\apointdate\\landind.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{878E9836-A4F3-4F5B-87E9-67EFA5A0E306}|apointDate.csproj|solutionrelative:landind.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{878E9836-A4F3-4F5B-87E9-67EFA5A0E306}|apointDate.csproj|c:\\telem\u00E1tica\\ingenier\u00EDa web\\apointdate\\apointdate\\inicioadmin.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{878E9836-A4F3-4F5B-87E9-67EFA5A0E306}|apointDate.csproj|solutionrelative:inicioadmin.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{878E9836-A4F3-4F5B-87E9-67EFA5A0E306}|apointDate.csproj|c:\\telem\u00E1tica\\ingenier\u00EDa web\\apointdate\\apointdate\\inicioprov.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{878E9836-A4F3-4F5B-87E9-67EFA5A0E306}|apointDate.csproj|solutionrelative:inicioprov.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "inicioUsuario.html",
+              "DocumentMoniker": "C:\\telem\u00E1tica\\Ingenier\u00EDa Web\\APOINTDATE\\apointDate\\inicioUsuario.html",
+              "RelativeDocumentMoniker": "inicioUsuario.html",
+              "ToolTip": "C:\\telem\u00E1tica\\Ingenier\u00EDa Web\\APOINTDATE\\apointDate\\inicioUsuario.html",
+              "RelativeToolTip": "inicioUsuario.html",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2025-09-30T05:04:11.715Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "inicioProv.html",
+              "DocumentMoniker": "C:\\telem\u00E1tica\\Ingenier\u00EDa Web\\APOINTDATE\\apointDate\\inicioProv.html",
+              "RelativeDocumentMoniker": "inicioProv.html",
+              "ToolTip": "C:\\telem\u00E1tica\\Ingenier\u00EDa Web\\APOINTDATE\\apointDate\\inicioProv.html",
+              "RelativeToolTip": "inicioProv.html",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2025-09-30T04:59:34.546Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "inicioAdmin.html",
+              "DocumentMoniker": "C:\\telem\u00E1tica\\Ingenier\u00EDa Web\\APOINTDATE\\apointDate\\inicioAdmin.html",
+              "RelativeDocumentMoniker": "inicioAdmin.html",
+              "ToolTip": "C:\\telem\u00E1tica\\Ingenier\u00EDa Web\\APOINTDATE\\apointDate\\inicioAdmin.html",
+              "RelativeToolTip": "inicioAdmin.html",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2025-09-30T04:57:27.484Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "landind.html",
+              "DocumentMoniker": "C:\\telem\u00E1tica\\Ingenier\u00EDa Web\\APOINTDATE\\apointDate\\landind.html",
+              "RelativeDocumentMoniker": "landind.html",
+              "ToolTip": "C:\\telem\u00E1tica\\Ingenier\u00EDa Web\\APOINTDATE\\apointDate\\landind.html",
+              "RelativeToolTip": "landind.html",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2025-09-30T04:49:36.194Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

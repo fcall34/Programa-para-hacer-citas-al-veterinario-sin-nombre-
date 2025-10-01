@@ -1,0 +1,143 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ApointDate - Proveedor</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        body {
+            background-color: #f4f6f9;
+        }
+
+        .sidebar {
+            height: 100vh;
+            background: #ff8c69; /* salmon */
+            color: #fff;
+            padding-top: 20px;
+        }
+
+            .sidebar a {
+                color: #fff;
+                text-decoration: none;
+                display: block;
+                padding: 10px 20px;
+                margin: 5px 0;
+                border-radius: 5px;
+            }
+
+                .sidebar a:hover {
+                    background: #ff7043;
+                    color: #fff;
+                }
+
+        .content {
+            padding: 20px;
+        }
+
+        .card-cita {
+            transition: transform 0.2s;
+        }
+
+            .card-cita:hover {
+                transform: scale(1.02);
+            }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 sidebar">
+                <h3 class="text-center">ApointDate</h3>
+                <hr>
+                <a href="#"><i class="bi bi-calendar-check"></i> Mis Citas</a>
+                <a href="#"><i class="bi bi-bar-chart"></i> Analytics</a>
+                <a href="#"><i class="bi bi-gear"></i> Configuración</a>
+                <a href="#"><i class="bi bi-box-arrow-right"></i> Cerrar sesión</a>
+            </div>
+
+            <!-- Contenido -->
+            <div class="col-md-10 content">
+                <h2>Panel de Proveedor</h2>
+                <p class="text-muted">Bienvenido, aquí puedes gestionar tus citas y ver tus estadísticas.</p>
+
+                <!-- Citas pendientes -->
+                <h4 class="mt-4">Citas en espera</h4>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card card-cita mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Cliente: Juan Pérez</h5>
+                                <p class="card-text">Fecha: 30/09/2025 - 10:00 AM</p>
+                                <button class="btn btn-success btn-sm aceptar">Aceptar</button>
+                                <button class="btn btn-danger btn-sm rechazar">Rechazar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analytics -->
+                <h4 class="mt-5">Analytics</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <canvas id="citasChart"></canvas>
+                    </div>
+                    <div class="col-md-6">
+                        <canvas id="estrellasChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Simulación de aceptar/rechazar citas
+        document.querySelectorAll('.aceptar').forEach(btn => {
+            btn.addEventListener('click', () => {
+                alert('Cita aceptada ✅');
+                btn.closest('.card').remove();
+            });
+        });
+
+        document.querySelectorAll('.rechazar').forEach(btn => {
+            btn.addEventListener('click', () => {
+                alert('Cita rechazada ❌');
+                btn.closest('.card').remove();
+            });
+        });
+
+        // Chart.js - Citas por semana
+        const ctx1 = document.getElementById('citasChart');
+        new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'],
+                datasets: [{
+                    label: 'Citas atendidas',
+                    data: [5, 8, 6, 10],
+                    backgroundColor: '#0d6efd'
+                }]
+            },
+            options: { responsive: true }
+        });
+
+        // Chart.js - Promedio de estrellas
+        const ctx2 = document.getElementById('estrellasChart');
+        new Chart(ctx2, {
+            type: 'doughnut',
+            data: {
+                labels: ['⭐5', '⭐4', '⭐3', '⭐2', '⭐1'],
+                datasets: [{
+                    data: [40, 30, 15, 10, 5],
+                    backgroundColor: ['#198754', '#0dcaf0', '#ffc107', '#fd7e14', '#dc3545']
+                }]
+            },
+            options: { responsive: true }
+        });
+    </script>
+</body>
+</html>
