@@ -1,10 +1,15 @@
-const path = require('path');
-const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const userRoutes = require('./routes/user.routes');
-const cookieParser = require('cookie-parser');
 
+import path from 'path'
+import { fileURLToPath } from 'url';
+import express from 'express'
+import cors from 'cors'
+import bodyParser from 'body-parser';
+import userRoutes from './routes/user.routes.js'
+import cookieParser from 'cookie-parser';
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 
 

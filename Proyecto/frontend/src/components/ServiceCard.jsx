@@ -1,23 +1,18 @@
-// components/ServiceCard.jsx
 import React from "react";
-import "./ServiceCard.css"; // O tailwind si usas tailwind
+import "./ServiceCard.css";
 
-const ServiceCard = ({ title, costRange, schedule, distance, onClick }) => {
+export default function ServiceCard({ title, price, distance, schedule, rating }) {
   return (
-    <div className="service-card" onClick={onClick}>
-      <h3>{title}</h3>
-
-      <div className="stars">★★★★★</div>
-
-      <p>{costRange}</p>
-      <p>{schedule}</p>
-
-      <div className="bottom-info">
-        <span className="pin">📍 {distance} km de ti</span>
-        <span className="icon">🗓️</span>
+    <div className="service-card">
+      <div>
+        <h3>{title}</h3>
+        <div className="stars">{rating} ⭐</div>
+        <div className="price">{price}</div>
+        <div className="schedule">{schedule}</div>
+        <div className="distance">📍 {distance} km de ti</div>
       </div>
+
+      <div className="calendar">📅</div>
     </div>
   );
-};
-
-export default ServiceCard;
+}

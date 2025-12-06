@@ -1,11 +1,12 @@
-const express = require('express');
-const router = express.Router();
-const { poolPromise, sql } = require('../database.js')
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const cookieParser = require('cookie-parser');
+import express from "express";
+import { poolPromise, sql } from "../database.js";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import { getAllServices, getServiceById } from "../Controllers/Client.Controllers.js"
+
 
 const JWT_SECRET = "super";
+const router = express.Router();
 
 function verifyToken(req, res, next) {
   console.log("HEADERS RECIBIDOS:", req.headers);
@@ -39,8 +40,9 @@ function verifyToken(req, res, next) {
   });
 }
 
-
-
+//get ALL SERVICES PAGINA CLIENTE
+router.get("/services", verifyToken, getAllServices);
+router.get("/services/:id", verifyToken, getServiceById);
 
 // POST /register
 router.post('/register', async (req, res) => {
@@ -234,6 +236,6 @@ router.get('/admin', async (req, res) => {
 });
 
 
-module.exports = router;
+export default router;
 
 

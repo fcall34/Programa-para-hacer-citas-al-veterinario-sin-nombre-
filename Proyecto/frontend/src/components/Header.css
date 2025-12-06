@@ -1,0 +1,31 @@
+.header-container {
+  width: 100%;
+  padding: 15px 25px;
+  background-color: #0a4fa3; /* Azul principal del home */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.header-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.profile-button {
+  padding: 8px 16px;
+  background-color: white;
+  color: #0a4fa3;
+  font-weight: bold;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.profile-button:hover {
+  background-color: #dce8f8;
+}

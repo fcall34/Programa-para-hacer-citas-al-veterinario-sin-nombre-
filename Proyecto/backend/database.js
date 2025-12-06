@@ -1,5 +1,5 @@
 // databaseb.js
-const sql = require("mssql");
+import sql from 'mssql'
 
 const dbConfig = { user: "miUsuario", password: "miPassword", database: "apointdate", server: "localhost", options: { encrypt : true, trustServerCertificate: true } };
 
@@ -12,4 +12,4 @@ const poolPromise = new sql.ConnectionPool(dbConfig).connect()
         console.error("Error, no se pudo conectar a la base de datos:", err);
     });
 
-module.exports = { sql, poolPromise };
+export {sql, poolPromise};

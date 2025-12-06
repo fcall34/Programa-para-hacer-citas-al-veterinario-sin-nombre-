@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import Sidebar from "../components/sidebar";
-import CitasEnEspera from "../components/CitasEnEspera";
-import Cancelaciones from "../components/Cancelaciones";
-import Resenas from "../components/Resenas";
-import PublishService from "../components/PublicarServicio";
+import Sidebar from "../components/sidebar.jsx";
+import CitasEnEspera from "../components/CitasEnEspera.jsx";
+import Cancelaciones from "../components/Cancelaciones.jsx";
+import Resenas from "../components/Resenas.jsx";
+import PublishService from "../components/PublicarServicio.jsx";
 
 export default function ProveedorDashBoard() {
   const [selected, setSelected] = useState("citas");

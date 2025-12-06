@@ -1,55 +1,87 @@
-// pages/Home.jsx
-import React, { useState } from "react";
-import ServiceCard from "../components/ServiceCard";
-import ServiceDetailCard from "../components/ServiceDetailCard";
-import './ClientHome.css'
+import React, { useEffect, useState } from "react";
+import SearchBar from "../components/SearchBar.jsx";
+import ServiceCard from "../components/ServiceCard.jsx";
+import ServiceDetailCard from "../components/ServiceDetailCard.jsx";
+import Header from "../components/Header.jsx";
+import "./ClientHome.css";
 
-const Home = () => {
-  const [selectedService, setSelectedService] = useState(null);
+export default function HomeClient() {
 
-  const sampleServices = [
-    {
-      service_id: 1,
-      title: "Hair Salon Narvarte",
-      cost: "250 - 500",
-      description: "Barbería y servicios de cuidado personal",
-      location: "Narvarte",
-      schedule: "lunes - viernes",
-      distance: 4,
-    },
-    {
-      service_id: 2,
-      title: "Moira's Hair Salon",
-      cost: "200 - 450",
-      description: "Servicios de color y tratamientos",
-      location: "Narvarte",
-      schedule: "lunes - sábado",
-      distance: 6.5,
-    },
-  ];
+  const [services, setServices] = useState([]);        // todos los servicios
+  const [selectedService, setSelectedService] = useState(null); // servicio seleccionado
+  const [loading, setLoading] = useState(true);
+
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const token = localStorage.getItem("token");
+
+        const res = await fetch("http://localhost:3000/api/services", {
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+          setServices(data.data);
+          setSelectedService(data.data[0]); // seleccionar el primero por default
+        }
+
+      } catch (err) {
+        console.error("Error trayendo servicios:", err);
+      }
+      setLoading(false);
+    };
+
+    fetchServices();
+  }, []);
+
+  if (loading) return <p className="loading">Cargando servicios...</p>;
 
   return (
-  <div className="home-container">
-      
-      <div className="service-list">
-        {sampleServices.map(s => (
-          <ServiceCard
-            key={s.service_id}
-            title={s.title}
-            costRange={`$${s.cost}`}
-            schedule={s.schedule}
-            distance={s.distance}
-            onClick={() => setSelectedService(s)}
-          />
-        ))}
-      </div>
+    <div className="home-wrapper">
 
-      <div className="service-detail-area">
-        <ServiceDetailCard service={selectedService} />
-      </div>
+      <Header />
 
-  </div>
-);
+
+      <div className="home-container">
+
+        <div className="top-area">
+          <SearchBar />
+        </div>
+        <div className="content-area">
+
+
+          <div className="left-column">
+
+            {services.map(service => (
+              <ServiceCard
+                key={service.service_id}
+                title={service.title}
+                price={`$${service.cost}`}
+                schedule={service.category_name ?? "Sin categoría"}
+                distance="--"
+                rating={5}
+
+                // Cuando se hace click, se muestra en la tarjeta grande
+                onClick={() => setSelectedService(service)}
+              />
+            ))}
+
+          </div>
+          <div className="right-column">
+            {selectedService ? (
+              <ServiceDetailCard service={selectedService} />
+            ) : (
+              <p className="no-service">Selecciona un servicio para ver detalles</p>
+            )}
+          </div>
+
+        </div>
+      </div>
+    </div>
+  );
 }
-
-export default Home;
