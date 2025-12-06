@@ -4,8 +4,8 @@ import Landing from './components/Landing';
 import Register from './components/Register';
 import Login from './components/Login';
 import ServicesPage from './components/ServiciesPage';
-import Proveedor from './components/proveedor';
 import AdminPage from './components/admin';
+import ProveedorDashBoard from './components/ProveedorDashBoard';
 
 function App() {
   return (
@@ -15,8 +15,8 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/services" element={<ServicesPage />} />
-        <Route path="/proveedor" element={<Proveedor />} />
         <Route path="/admin" element={<AdminPage />} />
+        <Route path='/ProveedorDashBoard' element={<ProveedorDashBoard/>}/>
       </Routes>
     </BrowserRouter>
   );

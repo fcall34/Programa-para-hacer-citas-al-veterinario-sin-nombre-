@@ -1,0 +1,23 @@
+.service-card {
+  background: white;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid #ccc;
+  width: 240px;
+  cursor: pointer;
+  transition: .2s ease;
+}
+
+.service-card:hover {
+  transform: scale(1.02);
+}
+
+.stars {
+  color: #7a3b06;
+}
+
+.bottom-info {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}

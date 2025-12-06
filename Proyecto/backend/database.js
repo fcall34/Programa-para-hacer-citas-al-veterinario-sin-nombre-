@@ -5,11 +5,11 @@ const dbConfig = { user: "miUsuario", password: "miPassword", database: "apointd
 
 const poolPromise = new sql.ConnectionPool(dbConfig).connect()
     .then(pool => {
-        console.log("✅ Conectado a SQL Server usando autenticación de Windows");
+        console.log("Conectado a SQL Server usando autenticación de Windows");
         return pool;
     })
     .catch(err => {
-        console.error("❌ Error, no se pudo conectar a la base de datos:", err);
+        console.error("Error, no se pudo conectar a la base de datos:", err);
     });
 
 module.exports = { sql, poolPromise };

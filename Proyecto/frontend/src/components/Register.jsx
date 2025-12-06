@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function Register() {
@@ -14,29 +13,35 @@ export default function Register() {
 
   const navigate = useNavigate();
 
-  const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = e =>
+    setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async e => {
-  e.preventDefault();
-  try {
-    const res = await axios.post('http://localhost:3000/api/register', form);
+    e.preventDefault();
 
-    if (res.data.success) {
-      alert(res.data.message);
+    try {
+      const res = await fetch('http://localhost:3000/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(form)
+      });
 
-      if (form.user_type === 1) {
-        navigate('/services'); // Cliente → página de servicios
+      const data = await res.json();
+
+      if (data.success) {
+        alert(data.message);
+        navigate('/login');
       } else {
-        navigate('/login'); // Proveedor → al login
+        alert(data.message || 'Error al registrar');
       }
-    } else {
-      alert(res.data.message);
+
+    } catch (err) {
+      console.error(err);
+      alert('Error al registrar');
     }
-  } catch (err) {
-    console.error(err);
-    alert('Error al registrar');
-  }
-};
+  };
 
   return (
     <div style={{ maxWidth: '400px', margin: '50px auto' }}>
@@ -47,10 +52,12 @@ export default function Register() {
         <input name="phone" placeholder="Teléfono" onChange={handleChange} />
         <input name="location" placeholder="Ubicación" onChange={handleChange} />
         <input type="password" name="password" placeholder="Contraseña" onChange={handleChange} required />
-        <select name="user_type" onChange={handleChange}>
+
+        <select name="user_type" onChange={handleChange} value={form.user_type}>
           <option value={1}>Cliente</option>
           <option value={2}>Proveedor</option>
         </select>
+
         <button type="submit">Registrarse</button>
       </form>
 

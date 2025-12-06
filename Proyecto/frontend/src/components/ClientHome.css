@@ -1,0 +1,20 @@
+.home-container {
+  display: flex;
+  gap: 40px;
+  padding: 40px;
+  font-family: "Segoe UI", sans-serif;
+  background: #f3efec;
+  min-height: 100vh;
+}
+
+/* Columna izquierda con lista de servicios */
+.service-list {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* Para que la columna derecha no se mueva raro */
+.service-detail-area {
+  flex-grow: 1;
+}

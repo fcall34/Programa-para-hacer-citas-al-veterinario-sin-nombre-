@@ -2,22 +2,60 @@ const express = require('express');
 const router = express.Router();
 const { poolPromise, sql } = require('../database.js')
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
 
-// POST /api/register
+const JWT_SECRET = "super";
+
+function verifyToken(req, res, next) {
+  console.log("HEADERS RECIBIDOS:", req.headers);
+  console.log("Authorization header:", req.headers["authorization"]);
+
+  const authHeader = req.headers["authorization"];
+
+  if (!authHeader) {
+    console.log("Token faltante en headers");
+    return res.status(401).json({ error: "No autorizado, falta token" });
+  }
+
+  const token = authHeader.split(" ")[1];
+
+  jwt.verify(token, JWT_SECRET, async (err, decoded) => {
+    if (err) return res.status(403).json({ error: "Token inválido o expirado" });
+
+    const pool = await poolPromise;
+    const result = await pool.request()
+      .input("id", sql.Int, decoded.id)
+      .query("SELECT SessionToken FROM Users WHERE user_id = @id");
+
+    const dbToken = result.recordset[0]?.SessionToken;
+
+    if (dbToken !== token) {
+      return res.status(403).json({ error: "Sesión inválida" });
+    }
+
+    req.user = decoded;
+    next();
+  });
+}
+
+
+
+
+// POST /register
 router.post('/register', async (req, res) => {
   const { full_name, email, phone, location, password, user_type } = req.body;
 
   if (!full_name || !email || !password || !user_type) {
-    return res.status(400).send('Faltan datos obligatorios');
+    return res.status(400).send({ success: false, message: 'Faltan datos obligatorios' });
   }
 
   try {
     const pool = await poolPromise;
 
-    // Hashear contraseña
     const password_hash = await bcrypt.hash(password, 10);
 
-    const result = await pool.request()
+    await pool.request()
       .input('full_name', sql.NVarChar(100), full_name)
       .input('email', sql.NVarChar(100), email)
       .input('phone', sql.NVarChar(20), phone)
@@ -29,15 +67,20 @@ router.post('/register', async (req, res) => {
         VALUES (@full_name, @email, @phone, @location, @password_hash, @user_type)
       `);
 
-    res.status(201).send({ message: 'Usuario registrado' });
+    res.status(201).send({
+      success: true,
+      message: 'Usuario registrado'
+    });
+
   } catch (err) {
     console.error(err);
-    res.status(500).send('Error en el servidor');
+    res.status(500).send({ success: false, message: 'Error en el servidor' });
   }
 });
 
 
-// POST /api/login
+
+// POST /login
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -62,21 +105,85 @@ router.post('/login', async (req, res) => {
       return res.json({ success: false, message: 'Contraseña incorrecta' });
     }
 
+    const token = jwt.sign({
+      id: user.user_id,
+      tipo: user.user_type
+
+    }, JWT_SECRET, {expiresIn: "1h"});
+
+    await pool.request()
+      .input("token", sql.VarChar, token)
+      .input("id", sql.Int, user.user_id)
+      .query("UPDATE [dbo].[Users] SET SessionToken = @token WHERE user_id = @id");
+
+    const redirect = user.user_type
+
     // Login exitoso
     res.json({
       success: true,
+      message: "Login exitoso",
       user: {
         id: user.user_id,
-        full_name: user.full_name,
-        email: user.email,
         user_type: user.user_type
-      }
+      },
+      redirect,
+      token
     });
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, message: 'Error al iniciar sesión' });
   }
 });
+
+//proveedores
+router.post("/publish", verifyToken, async (req, res) => {
+  try {
+    const provider_id = req.user.id;   
+
+    const {
+      title,
+      description,
+      cost,
+      location,
+      available,
+      category_id,
+      expiration_date
+    } = req.body;
+
+    if (!title || !description || !cost || !location || !category_id || !expiration_date) {
+      return res.status(400).json({ error: "Todos los campos son requeridos" });
+    }
+
+    const pool = await poolPromise;
+
+    await pool.request()
+      .input("provider_id", sql.Int, provider_id)
+      .input("title", sql.VarChar(100), title)
+      .input("description", sql.VarChar(sql.MAX), description)
+      .input("cost", sql.Decimal(10, 2), cost)
+      .input("location", sql.VarChar(150), location)
+      .input("available", sql.Bit, available)
+      .input("category_id", sql.Int, category_id)
+      .input("expiration_date", sql.Date, expiration_date)
+      .query(`
+        INSERT INTO Services (
+          provider_id, title, description, cost, location,
+          available, created_at, category_id, expiration_date
+        )
+        VALUES (
+          @provider_id, @title, @description, @cost, @location,
+          @available, GETDATE(), @category_id, @expiration_date
+        )
+      `);
+
+    res.json({ message: "Servicio publicado correctamente" });
+
+  } catch (error) {
+    console.error("Error al publicar servicio:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+});
+
 
 //pantalla clientes
 

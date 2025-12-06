@@ -1,0 +1,56 @@
+.service-detail-card {
+  width: 420px;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  border: 1px solid #c9c9c9;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  font-family: "Segoe UI", sans-serif;
+}
+
+.service-detail-card h2 {
+  font-size: 22px;
+  margin-bottom: 4px;
+  color: #2c2c2c;
+}
+
+.stars {
+  color: #8a4d2c;
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+
+.service-detail-card p {
+  color: #5a5a5a;
+  margin: 8px 0;
+  line-height: 1.4;
+}
+
+.service-detail-card .description {
+  margin-top: 12px;
+  font-size: 15px;
+}
+
+.reviews {
+  color: #1d68c4;
+  text-decoration: underline;
+  display: inline-block;
+  margin: 12px 0;
+  cursor: pointer;
+}
+
+.btn {
+  width: 100%;
+  padding: 12px;
+  background: #c7b6a4;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  color: white;
+  transition: 0.2s ease;
+}
+
+.btn:hover {
+  background: #b0a08f;
+}
