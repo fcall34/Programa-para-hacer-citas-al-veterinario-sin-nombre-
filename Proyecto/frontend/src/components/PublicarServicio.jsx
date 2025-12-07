@@ -8,7 +8,9 @@ export default function PublishService() {
     location: "",
     available: false,
     category_id: "",
-    expiration_date: ""
+    expiration_date: "",
+    start_time: "",
+    end_time: ""
   });
 
   const categories = [
@@ -32,6 +34,8 @@ export default function PublishService() {
     e.preventDefault();
 
     try {
+
+
       const token = localStorage.getItem("token");
       console.log("Token:", token);
 
@@ -40,22 +44,18 @@ export default function PublishService() {
         return;
       }
 
-      // ❗❗ FALTA: AWAIT al fetch
+      console.log(formData);
+  
       const res = await fetch("http://localhost:3000/api/publish", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-
-          // ❗❗ FALTA: enviar token
           "Authorization": "Bearer " + token
         },
         body: JSON.stringify(formData)
       });
 
-      // ❗❗ AQUÍ rompia: res no era un Response
       const data = await res.json();
-
-      console.log("Respuesta:", data);
 
       if (res.ok) {
         alert("Servicio publicado correctamente");
@@ -98,6 +98,25 @@ export default function PublishService() {
 
       <label>Fecha de expiración</label>
       <input type="date" name="expiration_date" value={formData.expiration_date} onChange={handleChange} required />
+
+      <label>Hora de inicio</label>
+      <input
+        type="time"
+        name="start_time"
+        value={formData.start_time}
+        onChange={handleChange}
+        required
+      />
+
+      <label>Hora de cierre</label>
+      <input
+        type="time"
+        name="end_time"
+        value={formData.end_time}
+        onChange={handleChange}
+        required
+      />
+
 
       <button type="submit">Publicar servicio</button>
     </form>

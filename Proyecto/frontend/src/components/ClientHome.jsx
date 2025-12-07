@@ -3,6 +3,7 @@ import SearchBar from "../components/SearchBar.jsx";
 import ServiceCard from "../components/ServiceCard.jsx";
 import ServiceDetailCard from "../components/ServiceDetailCard.jsx";
 import Header from "../components/Header.jsx";
+import ScheduleMenu from "./ScheduleMenu";
 import "./ClientHome.css";
 
 export default function HomeClient() {
@@ -11,11 +12,15 @@ export default function HomeClient() {
   const [selectedService, setSelectedService] = useState(null); // servicio seleccionado
   const [loading, setLoading] = useState(true);
 
+  // 🟦 NUEVO: controlar si el menú de agendar está abierto
+  const [showSchedule, setShowSchedule] = useState(false);
 
   useEffect(() => {
     const fetchServices = async () => {
       try {
         const token = localStorage.getItem("token");
+
+
 
         const res = await fetch("http://localhost:3000/api/services", {
           headers: {
@@ -24,6 +29,8 @@ export default function HomeClient() {
         });
 
         const data = await res.json();
+
+        console.log("SERVICIOS:", data.data);
 
         if (data.success) {
           setServices(data.data);
@@ -46,14 +53,13 @@ export default function HomeClient() {
 
       <Header />
 
-
       <div className="home-container">
 
         <div className="top-area">
           <SearchBar />
         </div>
-        <div className="content-area">
 
+        <div className="content-area">
 
           <div className="left-column">
 
@@ -62,19 +68,25 @@ export default function HomeClient() {
                 key={service.service_id}
                 title={service.title}
                 price={`$${service.cost}`}
-                schedule={service.category_name ?? "Sin categoría"}
+                category={service.category_description ?? "Sin categoría"} // esto sí es la categoría
+                start_time={service.start_time}
+                end_time={service.end_time}
                 distance="--"
                 rating={5}
-
-                // Cuando se hace click, se muestra en la tarjeta grande
                 onClick={() => setSelectedService(service)}
               />
             ))}
 
           </div>
+
           <div className="right-column">
             {selectedService ? (
-              <ServiceDetailCard service={selectedService} />
+              <ServiceDetailCard 
+                service={selectedService}
+
+                // 🟦 NUEVO: abrir menú de agendar cita
+                onOpenSchedule={() => setShowSchedule(true)}
+              />
             ) : (
               <p className="no-service">Selecciona un servicio para ver detalles</p>
             )}
@@ -82,6 +94,15 @@ export default function HomeClient() {
 
         </div>
       </div>
+
+      {/* 🟦 NUEVO: mostrar el menú de agendar cita */}
+      {showSchedule && (
+        <ScheduleMenu 
+          service={selectedService}
+          onClose={() => setShowSchedule(false)}
+        />
+      )}
+
     </div>
   );
 }

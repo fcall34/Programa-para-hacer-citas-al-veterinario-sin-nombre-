@@ -3,6 +3,7 @@ import { poolPromise, sql } from "../database.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { getAllServices, getServiceById } from "../Controllers/Client.Controllers.js"
+import { createAppointment } from "../Controllers/Appointment.Controllers.js"
 
 
 const JWT_SECRET = "super";
@@ -137,7 +138,7 @@ router.post('/login', async (req, res) => {
   }
 });
 
-//proveedores
+// publicar servicio
 router.post("/publish", verifyToken, async (req, res) => {
   try {
     const provider_id = req.user.id;   
@@ -149,12 +150,20 @@ router.post("/publish", verifyToken, async (req, res) => {
       location,
       available,
       category_id,
-      expiration_date
+      expiration_date,
+      start_time,
+      end_time
     } = req.body;
 
-    if (!title || !description || !cost || !location || !category_id || !expiration_date) {
+    if (!title || !description || !cost || !location || !category_id || !expiration_date || !start_time || !end_time) {
       return res.status(400).json({ error: "Todos los campos son requeridos" });
     }
+
+    if (start_time >= end_time) {
+        return res.status(400).json({
+          error: "La hora de cierre debe ser mayor que la hora de inicio"
+        });
+      }
 
     const pool = await poolPromise;
 
@@ -167,14 +176,17 @@ router.post("/publish", verifyToken, async (req, res) => {
       .input("available", sql.Bit, available)
       .input("category_id", sql.Int, category_id)
       .input("expiration_date", sql.Date, expiration_date)
+      .input("start_time", sql.VarChar, start_time)
+      .input("end_time", sql.VarChar, end_time)
+
       .query(`
         INSERT INTO Services (
           provider_id, title, description, cost, location,
-          available, created_at, category_id, expiration_date
+          available, created_at, category_id, expiration_date, start_time, end_time
         )
         VALUES (
           @provider_id, @title, @description, @cost, @location,
-          @available, GETDATE(), @category_id, @expiration_date
+          @available, GETDATE(), @category_id, @expiration_date, @start_time, @end_time
         )
       `);
 
@@ -234,6 +246,10 @@ router.get('/admin', async (req, res) => {
     res.status(500).send(err.message);
   }
 });
+
+// POST crear cita
+router.post("/appointments", verifyToken, createAppointment);
+
 
 
 export default router;

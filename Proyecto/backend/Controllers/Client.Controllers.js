@@ -7,6 +7,7 @@ export const getAllServices = async (req, res) => {
     const query = `
       SELECT 
         s.service_id,
+        s.provider_id,
         s.title,
         s.description,
         s.cost,
@@ -14,6 +15,8 @@ export const getAllServices = async (req, res) => {
         s.available,
         s.created_at,
         s.expiration_date,
+        s.start_time,
+        s.end_time,
         c.category_description,
         u.full_name AS provider_name
       FROM Services s
@@ -37,12 +40,12 @@ export const getAllServices = async (req, res) => {
 export const getServiceById = async (req, res) => {
   try {
     const service_id = req.params.id;
-
     const pool = await poolPromise;
 
     const query = `
       SELECT 
         s.*,
+
         c.category_name,
         u.name AS provider_name
       FROM Services s

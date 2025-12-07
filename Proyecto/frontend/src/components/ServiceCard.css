@@ -24,6 +24,11 @@
   margin-top: 5px;
 }
 
+.category {
+  font-weight: bold;
+  margin-top: 8px;
+}
+
 .price {
   font-weight: bold;
   margin-top: 8px;

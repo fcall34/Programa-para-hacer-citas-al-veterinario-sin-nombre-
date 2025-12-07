@@ -1,60 +1,118 @@
 .detail-card {
   background: white;
-  padding: 20px;
-  border-radius: 15px;
-  border: 2px solid #E1D6CF;
+  border-radius: 16px;
+  padding: 24px;
+  width: 100%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  border: 1px solid #e5e5e5;
+}
+
+/* HEADER */
+.detail-header {
   display: flex;
   justify-content: space-between;
-  gap: 20px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+  align-items: center;
 }
 
-.detail-left h2 {
-  margin: 0;
-  color: #6B564E;
+.detail-title {
+  font-size: 26px;
+  font-weight: 700;
 }
 
-.detail-stars {
-  color: #B88976;
-  margin: 10px 0;
-}
-
-.detail-location {
-  font-weight: bold;
-  color: #6B564E;
-}
-
-.description {
-  margin-top: 10px;
-  color: #6B564E;
+.detail-subtitle {
   font-size: 15px;
+  color: #666;
 }
 
-.reviews-link {
-  margin-top: 15px;
-  color: #B88976;
-  font-weight: bold;
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-.big-calendar {
-  font-size: 80px;
-  color: #B88976;
-}
-
-.detail-btn {
-  margin-top: 10px;
-  background: #B88976;
+/* BOTONES */
+.apply-btn {
+  background: #2563eb;
   color: white;
   border: none;
-  padding: 12px 20px;
-  border-radius: 12px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 15px;
   cursor: pointer;
-  transition: 0.3s;
-  font-weight: bold;
 }
 
-.detail-btn:hover {
-  background: #a87563;
+.icon-btn {
+  background: #f3f4f6;
+  border: none;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-left: 8px;
+  font-size: 18px;
+}
+
+.detail-actions {
+  display: flex;
+  align-items: center;
+}
+
+/* SECCIONES */
+.detail-section {
+  border-top: 1px solid #e5e5e5;
+  padding-top: 20px;
+}
+
+.detail-section h3 {
+  margin: 0 0 12px 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* ROWS */
+.info-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.info-icon {
+  font-size: 24px;
+}
+
+/* LABELS */
+.info-label {
+  font-size: 14px;
+  color: #555;
+  margin: 0;
+}
+
+/* BADGES */
+.badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 12px;
+  margin-top: 4px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.badge.green {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.badge.blue {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+/* DESCRIPCIÓN */
+.detail-description {
+  color: #444;
+  line-height: 1.5;
+}
+
+/* SI NO HAY SERVICIO */
+.no-service {
+  padding: 20px;
+  text-align: center;
+  color: #666;
 }
