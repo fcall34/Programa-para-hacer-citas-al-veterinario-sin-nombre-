@@ -22,6 +22,7 @@ export const getAllServices = async (req, res) => {
       FROM Services s
       LEFT JOIN category c ON s.category_id = c.category_id
       LEFT JOIN Users u ON s.provider_id = u.user_id
+      ORDER BY s.created_at DESC
     `;
 
     const result = await pool.request().query(query);

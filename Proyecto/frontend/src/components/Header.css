@@ -1,5 +1,5 @@
 .header-container {
-  width: 100%;
+  width: auto;
   padding: 15px 25px;
   background-color: #0a4fa3; /* Azul principal del home */
   display: flex;
@@ -26,6 +26,22 @@
   transition: 0.2s ease;
 }
 
+
 .profile-button:hover {
+  background-color: #dce8f8;
+}
+
+.citas-btn {
+  padding: 8px;
+  background-color: white;
+  color: #0a4fa3;
+  font-weight: bold;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.citas-btn:hover {
   background-color: #dce8f8;
 }

@@ -3,7 +3,7 @@ import { poolPromise, sql } from "../database.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { getAllServices, getServiceById } from "../Controllers/Client.Controllers.js"
-import { createAppointment } from "../Controllers/Appointment.Controllers.js"
+import { createAppointment, getAppointments } from "../Controllers/Appointment.Controllers.js"
 
 
 const JWT_SECRET = "super";
@@ -201,40 +201,7 @@ router.post("/publish", verifyToken, async (req, res) => {
 
 //pantalla clientes
 
-// Obtener todos los servicios (con filtros opcionales)
-router.get('/', async (req, res) => {
-  try {
-    const pool = await poolPromise;
-    let query = "SELECT service_id, title, category, cost, location FROM Services WHERE available = 1";
 
-    if (req.query.location) {
-      query += ` AND location LIKE '%${req.query.location}%'`;
-    }
-    if (req.query.maxPrice) {
-      query += ` AND cost <= ${req.query.maxPrice}`;
-    }
-
-    const result = await pool.request().query(query);
-    res.json(result.recordset);
-  } catch (err) {
-    res.status(500).send(err.message);
-  }
-});
-
-// Obtener detalles de un servicio por ID
-router.get('/:id', async (req, res) => {
-  try {
-    const pool = await poolPromise;
-    const result = await pool.request()
-      .input("id", sql.Int, req.params.id)
-      .query("SELECT * FROM Services WHERE service_id = @id");
-
-    if (result.recordset.length === 0) return res.status(404).send("Servicio no encontrado");
-    res.json(result.recordset[0]);
-  } catch (err) {
-    res.status(500).send(err.message);
-  }
-});
 
 // Obtener todos los usuarios
 router.get('/admin', async (req, res) => {
@@ -249,6 +216,9 @@ router.get('/admin', async (req, res) => {
 
 // POST crear cita
 router.post("/appointments", verifyToken, createAppointment);
+
+//ver citas segun id
+router.get("/appointments/miscitas", verifyToken, getAppointments);
 
 
 

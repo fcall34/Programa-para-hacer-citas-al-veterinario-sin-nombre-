@@ -4,6 +4,7 @@ import ServiceCard from "../components/ServiceCard.jsx";
 import ServiceDetailCard from "../components/ServiceDetailCard.jsx";
 import Header from "../components/Header.jsx";
 import ScheduleMenu from "./ScheduleMenu";
+import AppointmentsList from "./AppointmentList.jsx";
 import "./ClientHome.css";
 
 export default function HomeClient() {
@@ -12,8 +13,8 @@ export default function HomeClient() {
   const [selectedService, setSelectedService] = useState(null); // servicio seleccionado
   const [loading, setLoading] = useState(true);
 
-  // 🟦 NUEVO: controlar si el menú de agendar está abierto
   const [showSchedule, setShowSchedule] = useState(false);
+  const [view, setView] = useState('services');
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -49,10 +50,12 @@ export default function HomeClient() {
   if (loading) return <p className="loading">Cargando servicios...</p>;
 
   return (
-    <div className="home-wrapper">
+  <div className="home-wrapper">
 
-      <Header />
+    <Header onViewAppointments={() => setView("appointments")} />
 
+
+    {view === "services" && (
       <div className="home-container">
 
         <div className="top-area">
@@ -62,13 +65,12 @@ export default function HomeClient() {
         <div className="content-area">
 
           <div className="left-column">
-
             {services.map(service => (
               <ServiceCard
                 key={service.service_id}
                 title={service.title}
                 price={`$${service.cost}`}
-                category={service.category_description ?? "Sin categoría"} // esto sí es la categoría
+                category={service.category_description ?? "Sin categoría"}
                 start_time={service.start_time}
                 end_time={service.end_time}
                 distance="--"
@@ -76,15 +78,12 @@ export default function HomeClient() {
                 onClick={() => setSelectedService(service)}
               />
             ))}
-
           </div>
 
           <div className="right-column">
             {selectedService ? (
-              <ServiceDetailCard 
+              <ServiceDetailCard
                 service={selectedService}
-
-                // 🟦 NUEVO: abrir menú de agendar cita
                 onOpenSchedule={() => setShowSchedule(true)}
               />
             ) : (
@@ -94,15 +93,26 @@ export default function HomeClient() {
 
         </div>
       </div>
+    )}
 
-      {/* 🟦 NUEVO: mostrar el menú de agendar cita */}
-      {showSchedule && (
-        <ScheduleMenu 
-          service={selectedService}
-          onClose={() => setShowSchedule(false)}
-        />
-      )}
+    {view === "appointments" && (
+      <div className="appointments-container">
+        <AppointmentsList />
 
-    </div>
-  );
+        <button className="back-btn" onClick={() => setView("services")}>
+          ← Volver a Servicios
+        </button>
+      </div>
+    )}
+
+    {showSchedule && (
+      <ScheduleMenu
+        service={selectedService}
+        onClose={() => setShowSchedule(false)}
+      />
+    )}
+
+  </div>
+);
+
 }

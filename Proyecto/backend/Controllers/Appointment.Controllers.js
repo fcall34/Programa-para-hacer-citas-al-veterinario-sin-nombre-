@@ -85,3 +85,42 @@ export const createAppointment = async (req, res) => {
     return res.status(500).json({ success: false, message: "Error en el servidor" });
   }
 };
+
+export const getAppointments = async (req, res) => {
+  try {
+    const pool = await poolPromise;
+    const client_id = req.user.id;
+
+    const query = `
+      SELECT 
+        a.Appointment_id AS appointment_id,
+        CONVERT(varchar(19), a.Appointment_date, 120) AS appointment_date, -- "YYYY-MM-DD HH:MM:SS"
+        a.Appointment_status AS appointment_status,
+        a.Appointment_time AS appointment_time,
+        s.title AS title,
+        s.location AS location,
+        FORMAT(s.start_time, 'HH:mm') AS service_start_time,
+        FORMAT(s.end_time, 'HH:mm') AS service_end_time,
+        c.category_description AS category
+      FROM dbo.Appointments a
+      JOIN dbo.Services s ON a.service_id = s.service_id
+      LEFT JOIN dbo.Category c ON s.category_id = c.category_id
+      WHERE a.client_id = @client_id
+      ORDER BY a.Appointment_date DESC
+    `;
+
+    const result = await pool.request()
+      .input("client_id", sql.Int, client_id)
+      .query(query);
+
+    return res.json({
+      success: true,
+      data: result.recordset
+    });
+  } catch (err) {
+    console.error("Error getAppointments:", err);
+    return res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+
