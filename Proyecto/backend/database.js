@@ -1,7 +1,13 @@
 // databaseb.js
 import sql from 'mssql'
 
-const dbConfig = { user: "miUsuario", password: "miPassword", database: "apointdate", server: "localhost", options: { encrypt : true, trustServerCertificate: true } };
+const dbConfig = { 
+    user: "miUsuario", 
+    password: "miPassword", 
+    database: "apointdate", 
+    server: "localhost", 
+    options: { encrypt : true, 
+        trustServerCertificate: true } };
 
 const poolPromise = new sql.ConnectionPool(dbConfig).connect()
     .then(pool => {

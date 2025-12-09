@@ -21,6 +21,7 @@ export default function PublishService() {
     { id: 5, name: "Tecnología" }
   ];
 
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
@@ -46,7 +47,7 @@ export default function PublishService() {
 
       console.log(formData);
   
-      const res = await fetch("http://localhost:3000/api/publish", {
+      const res = await fetch("http://localhost:3000/api/provider/publish", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

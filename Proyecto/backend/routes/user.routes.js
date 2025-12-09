@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { getAllServices, getServiceById } from "../Controllers/Client.Controllers.js"
 import { createAppointment, getAppointments } from "../Controllers/Appointment.Controllers.js"
+import {publishService, ViewAllAppointments, UpdateAppointmentStatus} from "../Controllers/Provider.Controllers.js"
 
 
 const JWT_SECRET = "super";
@@ -138,70 +139,6 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// publicar servicio
-router.post("/publish", verifyToken, async (req, res) => {
-  try {
-    const provider_id = req.user.id;   
-
-    const {
-      title,
-      description,
-      cost,
-      location,
-      available,
-      category_id,
-      expiration_date,
-      start_time,
-      end_time
-    } = req.body;
-
-    if (!title || !description || !cost || !location || !category_id || !expiration_date || !start_time || !end_time) {
-      return res.status(400).json({ error: "Todos los campos son requeridos" });
-    }
-
-    if (start_time >= end_time) {
-        return res.status(400).json({
-          error: "La hora de cierre debe ser mayor que la hora de inicio"
-        });
-      }
-
-    const pool = await poolPromise;
-
-    await pool.request()
-      .input("provider_id", sql.Int, provider_id)
-      .input("title", sql.VarChar(100), title)
-      .input("description", sql.VarChar(sql.MAX), description)
-      .input("cost", sql.Decimal(10, 2), cost)
-      .input("location", sql.VarChar(150), location)
-      .input("available", sql.Bit, available)
-      .input("category_id", sql.Int, category_id)
-      .input("expiration_date", sql.Date, expiration_date)
-      .input("start_time", sql.VarChar, start_time)
-      .input("end_time", sql.VarChar, end_time)
-
-      .query(`
-        INSERT INTO Services (
-          provider_id, title, description, cost, location,
-          available, created_at, category_id, expiration_date, start_time, end_time
-        )
-        VALUES (
-          @provider_id, @title, @description, @cost, @location,
-          @available, GETDATE(), @category_id, @expiration_date, @start_time, @end_time
-        )
-      `);
-
-    res.json({ message: "Servicio publicado correctamente" });
-
-  } catch (error) {
-    console.error("Error al publicar servicio:", error);
-    res.status(500).json({ error: "Error interno del servidor" });
-  }
-});
-
-
-//pantalla clientes
-
-
 
 // Obtener todos los usuarios
 router.get('/admin', async (req, res) => {
@@ -213,6 +150,17 @@ router.get('/admin', async (req, res) => {
     res.status(500).send(err.message);
   }
 });
+
+//post crear servicio
+router.post("/provider/publish", verifyToken, publishService);
+
+//get obtener citas segun provider_id
+router.get("/provider/miscitas", verifyToken, ViewAllAppointments);
+
+//cambiar estado cita
+router.put("/provider/status/:id", verifyToken, UpdateAppointmentStatus);
+
+
 
 // POST crear cita
 router.post("/appointments", verifyToken, createAppointment);
