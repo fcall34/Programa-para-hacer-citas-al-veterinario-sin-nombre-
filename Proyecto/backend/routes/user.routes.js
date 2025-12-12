@@ -5,7 +5,8 @@ import jwt from "jsonwebtoken";
 import { getAllServices, getServiceById } from "../Controllers/Client.Controllers.js"
 import { createAppointment, getAppointments } from "../Controllers/Appointment.Controllers.js"
 import {publishService, ViewAllAppointments, UpdateAppointmentStatus} from "../Controllers/Provider.Controllers.js"
-
+import {adminGetAllUsers, adminGetAllServices, adminDeleteUser, adminDeleteService, adminCreateUser} from "../Controllers/Admin.Controllers.js"
+import { logoutUser } from "../Controllers/Auth.Controllers.js";
 
 const JWT_SECRET = "super";
 const router = express.Router();
@@ -140,16 +141,7 @@ router.post('/login', async (req, res) => {
 });
 
 
-// Obtener todos los usuarios
-router.get('/admin', async (req, res) => {
-  try {
-    const pool = await poolPromise;
-    const result = await pool.request().query("SELECT user_id, full_name, email, phone, location, user_type FROM Users");
-    res.json(result.recordset);
-  } catch (err) {
-    res.status(500).send(err.message);
-  }
-});
+
 
 //post crear servicio
 router.post("/provider/publish", verifyToken, publishService);
@@ -167,6 +159,17 @@ router.post("/appointments", verifyToken, createAppointment);
 
 //ver citas segun id
 router.get("/appointments/miscitas", verifyToken, getAppointments);
+
+
+//admin
+router.get("/admin/users", verifyToken, adminGetAllUsers);
+router.get("/admin/services", verifyToken, adminGetAllServices);
+router.delete("/admin/delete-user/:id", verifyToken, adminDeleteUser);
+router.delete("/admin/delete-service/:id", verifyToken, adminDeleteService);
+router.post("/admin/create-user", verifyToken, adminCreateUser);
+
+//logout
+router.post("/logout", verifyToken, logoutUser);
 
 
 

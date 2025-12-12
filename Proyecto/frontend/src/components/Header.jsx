@@ -1,10 +1,12 @@
 import React from "react";
 import "./Header.css";
+import LogoutButton from "./logout";
 
 export default function Header({ onViewAppointments }) {
   return (
     <header className="header-container">
       <h1 className="header-title">A Point Date</h1>
+
 
       <button 
         className="citas-btn"
@@ -16,6 +18,8 @@ export default function Header({ onViewAppointments }) {
       <button className="profile-button">
         Mi Perfil
       </button>
+
+      <LogoutButton/>
     </header>
   );
 }

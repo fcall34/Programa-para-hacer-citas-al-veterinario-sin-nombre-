@@ -4,9 +4,9 @@ import Landing from './components/Landing.jsx';
 import Register from './components/Register.jsx';
 import Login from './components/Login.jsx';
 import ServicesPage from './components/ServiciesPage.jsx';
-import AdminPage from './components/admin.jsx';
 import ProveedorDashBoard from './components/ProveedorDashBoard.jsx';
 import ClientHome from './components/ClientHome.jsx'
+import AdminDashboard from './components/AdminPage.jsx'
 
 function App() {
   return (
@@ -16,9 +16,9 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/services" element={<ServicesPage />} />
-        <Route path="/admin" element={<AdminPage />} />
         <Route path='/ProveedorDashBoard' element={<ProveedorDashBoard/>}/>
         <Route path='/ClientHome' element={<ClientHome/>}/>
+        <Route path='/AdminDashboard' element={<AdminDashboard/>}/>
       </Routes>
     </BrowserRouter>
   );

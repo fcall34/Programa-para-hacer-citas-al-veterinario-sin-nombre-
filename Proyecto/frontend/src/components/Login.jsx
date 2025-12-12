@@ -40,7 +40,7 @@ export default function Login() {
 
       if (type === 1) navigate("/ClientHome");
       else if (type === 2) navigate("/ProveedorDashBoard");
-      else if (type === 3) navigate("/admin");
+      else if (type === 3) navigate("/AdminDashboard");
       else navigate("/");
     } else {
       alert(data.message);

@@ -4,24 +4,22 @@ import LogoutButton from "./logout";
 export default function Sidebar({ onSelect }) {
   return (
     <div style={styles.sidebar}>
-      <h2 style={styles.title}>A point date!</h2>
-      <button style={styles.btn} onClick={() => onSelect("publicar")}>
-        Publicar Servicio
+      <h2 style={styles.title}>Admin Panel</h2>
+
+      <button style={styles.btn} onClick={() => onSelect("users")}>
+        Ver Usuarios
       </button>
 
-      <button style={styles.btn} onClick={() => onSelect("citas")}>
-        Citas en espera
+      <button style={styles.btn} onClick={() => onSelect("services")}>
+        Ver Servicios
       </button>
 
-      <button style={styles.btn} onClick={() => onSelect("cancelaciones")}>
-        Cancelaciones
+      <button style={styles.btn} onClick={() => onSelect("addAdmin")}>
+        Crear Admin
       </button>
 
-      <button style={styles.btn} onClick={() => onSelect("resenas")}>
-        Reseñas
-      </button>
-
-       <LogoutButton />
+      <LogoutButton/>
+      
     </div>
   );
 }
