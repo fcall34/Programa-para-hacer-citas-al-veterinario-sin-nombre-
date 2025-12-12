@@ -7,6 +7,7 @@ import ServicesPage from './components/ServiciesPage.jsx';
 import ProveedorDashBoard from './components/ProveedorDashBoard.jsx';
 import ClientHome from './components/ClientHome.jsx'
 import AdminDashboard from './components/AdminPage.jsx'
+import UserProfile from "./components/UserProfile.jsx";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path='/ProveedorDashBoard' element={<ProveedorDashBoard/>}/>
         <Route path='/ClientHome' element={<ClientHome/>}/>
         <Route path='/AdminDashboard' element={<AdminDashboard/>}/>
+        <Route path="/profile" element={<UserProfile />} />
       </Routes>
     </BrowserRouter>
   );

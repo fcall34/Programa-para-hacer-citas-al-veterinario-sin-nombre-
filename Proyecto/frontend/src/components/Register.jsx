@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import './Register.css'; // <--- ¡IMPORTANTE! Importa el CSS aquí
 
 export default function Register() {
   const [form, setForm] = useState({
@@ -20,6 +21,7 @@ export default function Register() {
     e.preventDefault();
 
     try {
+      // Asegúrate de que la URL coincida con el puerto de tu backend (ej. 3000)
       const res = await fetch('http://localhost:3000/api/register', {
         method: 'POST',
         headers: {
@@ -39,31 +41,75 @@ export default function Register() {
 
     } catch (err) {
       console.error(err);
-      alert('Error al registrar');
+      alert('Error al registrar. Revisa la conexión con el servidor.');
     }
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: '50px auto' }}>
-      <h2>Registrarse</h2>
-      <form onSubmit={handleSubmit}>
-        <input name="full_name" placeholder="Nombre completo" onChange={handleChange} required />
-        <input name="email" placeholder="Correo electrónico" onChange={handleChange} required />
-        <input name="phone" placeholder="Teléfono" onChange={handleChange} />
-        <input name="location" placeholder="Ubicación" onChange={handleChange} />
-        <input type="password" name="password" placeholder="Contraseña" onChange={handleChange} required />
+    // Contenedor principal (Fondo gris)
+    <div className="register-wrapper">
+      
+      {/* Tarjeta blanca centrada */}
+      <div className="register-card">
+        <h2>Crear Cuenta</h2>
+        
+        <form onSubmit={handleSubmit}>
+          <input 
+            className="register-input" // <-- Clase añadida
+            name="full_name" 
+            placeholder="Nombre completo" 
+            onChange={handleChange} 
+            required 
+          />
+          <input 
+            className="register-input" // <-- Clase añadida
+            name="email" 
+            type="email"
+            placeholder="Correo electrónico" 
+            onChange={handleChange} 
+            required 
+          />
+          <input 
+            className="register-input" // <-- Clase añadida
+            name="phone" 
+            placeholder="Teléfono" 
+            onChange={handleChange} 
+          />
+          <input 
+            className="register-input" // <-- Clase añadida
+            name="location" 
+            placeholder="Ubicación (Ciudad)" 
+            onChange={handleChange} 
+          />
+          <input 
+            className="register-input" // <-- Clase añadida
+            type="password" 
+            name="password" 
+            placeholder="Contraseña" 
+            onChange={handleChange} 
+            required 
+          />
 
-        <select name="user_type" onChange={handleChange} value={form.user_type}>
-          <option value={1}>Cliente</option>
-          <option value={2}>Proveedor</option>
-        </select>
+          {/* El select también usa la misma clase de input */}
+          <select 
+            className="register-input" // <-- Clase añadida
+            name="user_type" 
+            onChange={handleChange} 
+            value={form.user_type}
+            style={{cursor: 'pointer'}}
+          >
+            <option value={1}>Soy Cliente (Busco servicios)</option>
+            <option value={2}>Soy Proveedor (Ofrezco servicios)</option>
+          </select>
 
-        <button type="submit">Registrarse</button>
-      </form>
+          <button type="submit" className="register-btn">Registrarse</button>
+        </form>
 
-      <p style={{ marginTop: '20px' }}>
-        ¿Ya tienes una cuenta? <Link to="/login">Inicia sesión aquí</Link>
-      </p>
+        <p className="register-footer">
+          ¿Ya tienes una cuenta? 
+          <Link to="/login">Inicia sesión aquí</Link>
+        </p>
+      </div>
     </div>
   );
 }

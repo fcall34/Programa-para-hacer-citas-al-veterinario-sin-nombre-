@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './Login.css'; // <--- IMPORTANTE: Importar los estilos
 
 export default function Login() {
 
   useEffect(() => {
-    // Limpiar usuario previo para evitar redirecciones automáticas
+    // Limpiar usuario previo
     localStorage.removeItem('user');
   }, []);
 
@@ -16,66 +17,79 @@ export default function Login() {
   };
 
   const handleSubmit = async e => {
-  e.preventDefault();
+    e.preventDefault();
+    try {
+      const res = await fetch("http://localhost:3000/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+        mode: "cors"
+      });
 
-  try {
-    const res = await fetch("http://localhost:3000/api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(form),
-      mode: "cors"
-    });
+      const data = await res.json();
+      console.log("DATA:", data);
 
-    const data = await res.json();
-    console.log("DATA:", data);
-
-    if (data.success) {
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
-
-      alert("Login exitoso");
-      const type = data.user.user_type;
-
-      if (type === 1) navigate("/ClientHome");
-      else if (type === 2) navigate("/ProveedorDashBoard");
-      else if (type === 3) navigate("/AdminDashboard");
-      else navigate("/");
-    } else {
-      alert(data.message);
+      if (data.success) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
+        
+        // Redirección según tipo de usuario
+        const type = data.user.user_type;
+        if (type === 1) navigate("/ClientHome");
+        else if (type === 2) navigate("/ProveedorDashBoard");
+        else if (type === 3) navigate("/AdminDashboard");
+        else navigate("/");
+      } else {
+        alert(data.message);
+      }
+    } catch (err) {
+      console.error("ERROR en login:", err);
+      alert("Error al iniciar sesión");
     }
-
-  } catch (err) {
-    console.error("ERROR en login:", err);
-    alert("Error al iniciar sesión");
-  }
-};
-
+  };
 
   return (
-    <form onSubmit={handleSubmit} style={{ maxWidth: '400px', margin: '50px auto' }}>
-      <h2>Iniciar sesión</h2>
+    // Contenedor principal (Fondo gris)
+    <div className="login-wrapper">
+      
+      {/* Tarjeta blanca centrada */}
+      <div className="login-card">
+        
+        <form onSubmit={handleSubmit}>
+          <h2>¡Hola de nuevo!</h2>
+          <p style={{marginBottom: '25px', color: '#666'}}>Ingresa tus datos para continuar</p>
 
-      <input
-        type="email"
-        name="email"
-        placeholder="Correo electrónico"
-        value={form.email}
-        onChange={handleChange}
-        required
-      />
+          <input
+            className="login-input"
+            type="email"
+            name="email"
+            placeholder="Correo electrónico"
+            value={form.email}
+            onChange={handleChange}
+            required
+          />
 
-      <input
-        type="password"
-        name="password"
-        placeholder="Contraseña"
-        value={form.password}
-        onChange={handleChange}
-        required
-      />
+          <input
+            className="login-input"
+            type="password"
+            name="password"
+            placeholder="Contraseña"
+            value={form.password}
+            onChange={handleChange}
+            required
+          />
 
-      <button type="submit">Entrar</button>
-    </form>
+          <button className="login-btn" type="submit">
+            Entrar
+          </button>
+        </form>
+
+        {/* Opcional: Link a registro si lo tienes */}
+        <div className="login-footer">
+          ¿No tienes cuenta? <span style={{color: '#0066ff', cursor: 'pointer'}}>Regístrate aquí</span>
+        </div>
+
+      </div>
+    </div>
   );
 }

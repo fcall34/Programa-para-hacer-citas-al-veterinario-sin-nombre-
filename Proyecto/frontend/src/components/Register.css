@@ -1,0 +1,87 @@
+/* Register.css */
+
+/* Fondo general que ocupa toda la pantalla y centra el contenido */
+.register-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f3f6fb; /* Mismo color del resto de la app */
+  padding: 20px; /* Un poco de espacio en pantallas pequeñas */
+}
+
+/* La tarjeta blanca del formulario */
+.register-card {
+  background-color: white;
+  padding: 40px;
+  width: 100%;
+  max-width: 450px; /* Un poquito más ancha que el login porque tiene más datos */
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+/* Título */
+.register-card h2 {
+  margin-bottom: 25px;
+  color: #333;
+  font-size: 26px;
+  font-weight: 700;
+}
+
+/* Estilo para los inputs Y el select */
+.register-input {
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 15px; /* Menos margen que en el login para que quepan bien */
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  outline: none;
+  transition: all 0.3s ease;
+  background-color: #fafafa;
+  box-sizing: border-box;
+  /* Esto ayuda a que el 'select' se vea del mismo alto que los inputs */
+  min-height: 45px; 
+}
+
+/* Efecto al dar clic en los campos */
+.register-input:focus {
+  border-color: #0066ff;
+  background-color: white;
+  box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1);
+}
+
+/* Botón de registrarse */
+.register-btn {
+  width: 100%;
+  padding: 14px;
+  background-color: #0066ff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+.register-btn:hover {
+  background-color: #0052cc;
+}
+
+/* El texto de abajo para ir al login */
+.register-footer {
+  margin-top: 25px;
+  font-size: 14px;
+  color: #666;
+}
+
+/* Estilo del enlace */
+.register-footer a {
+  color: #0066ff;
+  text-decoration: none;
+  font-weight: 600;
+  margin-left: 5px;
+}
