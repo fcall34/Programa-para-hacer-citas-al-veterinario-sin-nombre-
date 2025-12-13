@@ -1,56 +1,49 @@
 import React from "react";
 import LogoutButton from "./logout";
+import "./sidebar.css";
 
-export default function Sidebar({ onSelect }) {
+export default function Sidebar({ onSelect, selectedOption }) {
+  
+  const getButtonClass = (optionName) => {
+    return `sidebar-btn ${selectedOption === optionName ? "active" : ""}`;
+  };
+
   return (
-    <div style={styles.sidebar}>
-      <h2 style={styles.title}>A point date!</h2>
-      <button style={styles.btn} onClick={() => onSelect("publicar")}>
+    <div className="sidebar-container">
+      <h2 className="sidebar-title">A Point Date</h2>
+
+      <button 
+        className={getButtonClass("publicar")} 
+        onClick={() => onSelect("publicar")}
+      >
         Publicar Servicio
       </button>
 
-      <button style={styles.btn} onClick={() => onSelect("citas")}>
+      <button 
+        className={getButtonClass("citas")} 
+        onClick={() => onSelect("citas")}
+      >
         Citas en espera
       </button>
 
-      <button style={styles.btn} onClick={() => onSelect("cancelaciones")}>
-        Cancelaciones
+      {/* AQUÍ CAMBIAMOS CANCELACIONES POR STATS */}
+      <button 
+        className={getButtonClass("stats")} 
+        onClick={() => onSelect("stats")}
+      >
+        Estadísticas
       </button>
 
-      <button style={styles.btn} onClick={() => onSelect("resenas")}>
+      <button 
+        className={getButtonClass("resenas")} 
+        onClick={() => onSelect("resenas")}
+      >
         Reseñas
       </button>
 
-       <LogoutButton />
+      <div className="sidebar-footer">
+        <LogoutButton />
+      </div>
     </div>
   );
 }
-
-const styles = {
-  sidebar: {
-    width: "250px",
-    height: "100vh",
-    padding: "20px",
-    backgroundColor: "#ece5dd",
-    display: "flex",
-    flexDirection: "column",
-    gap: "20px",
-  },
-  title: {
-    fontSize: "24px",
-    marginBottom: "20px"
-  },
-  btn: {
-    backgroundColor: "#b9a89c",
-    border: "none",
-    padding: "15px",
-    borderRadius: "20px",
-    fontSize: "16px",
-    cursor: "pointer"
-  },
-  logout: {
-    marginTop: "20px",
-    color: "#0077cc",
-    textDecoration: "none"
-  }
-};

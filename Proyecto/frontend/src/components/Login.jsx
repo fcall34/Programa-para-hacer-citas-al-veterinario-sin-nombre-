@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './Login.css'; // <--- IMPORTANTE: Importar los estilos
+import { useNavigate, Link } from 'react-router-dom'; // <--- 1. AQUÍ AGREGUÉ 'Link'
+import './Login.css';
 
 export default function Login() {
 
   useEffect(() => {
-    // Limpiar usuario previo
     localStorage.removeItem('user');
   }, []);
 
@@ -33,7 +32,6 @@ export default function Login() {
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
         
-        // Redirección según tipo de usuario
         const type = data.user.user_type;
         if (type === 1) navigate("/ClientHome");
         else if (type === 2) navigate("/ProveedorDashBoard");
@@ -49,10 +47,7 @@ export default function Login() {
   };
 
   return (
-    // Contenedor principal (Fondo gris)
     <div className="login-wrapper">
-      
-      {/* Tarjeta blanca centrada */}
       <div className="login-card">
         
         <form onSubmit={handleSubmit}>
@@ -84,9 +79,20 @@ export default function Login() {
           </button>
         </form>
 
-        {/* Opcional: Link a registro si lo tienes */}
+        {/* 2. AQUÍ ESTÁ EL CAMBIO IMPORTANTE: */}
         <div className="login-footer">
-          ¿No tienes cuenta? <span style={{color: '#0066ff', cursor: 'pointer'}}>Regístrate aquí</span>
+          ¿No tienes cuenta? 
+          <Link 
+            to="/register" 
+            style={{
+              color: '#0066ff', 
+              textDecoration: 'none', 
+              fontWeight: 'bold', 
+              marginLeft: '5px'
+            }}
+          >
+            Regístrate aquí
+          </Link>
         </div>
 
       </div>

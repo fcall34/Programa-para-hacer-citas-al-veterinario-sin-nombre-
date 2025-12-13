@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import Sidebar from "../components/sidebar.jsx";
+import Sidebar from "../components/sidebar.jsx"; // Asegúrate de la mayúscula si el archivo la tiene
 import CitasEnEspera from "../components/CitasEnEspera.jsx";
-import Cancelaciones from "../components/Cancelaciones.jsx";
+import Stats from "../components/Stats.jsx"; // <--- Importar Stats
 import Resenas from "../components/Resenas.jsx";
 import PublishService from "../components/PublicarServicio.jsx";
+import "./ProveedorDashBoard.css"; // <--- Importamos los estilos del layout
 
 export default function ProveedorDashBoard() {
+  // Iniciamos en 'citas' por defecto
   const [selected, setSelected] = useState("citas");
 
   const renderContent = () => {
@@ -14,8 +16,8 @@ export default function ProveedorDashBoard() {
         return <PublishService />;
       case "citas":
         return <CitasEnEspera />;
-      case "cancelaciones":
-        return <Cancelaciones />;
+      case "stats":
+        return <Stats />;
       case "resenas":
         return <Resenas />;
       default:
@@ -24,24 +26,15 @@ export default function ProveedorDashBoard() {
   };
 
   return (
-    <div style={styles.layout}>
-      <Sidebar onSelect={setSelected} />
-      <div style={styles.content}>
+    <div className="dashboard-layout">
+      {/* Pasamos 'selected' para que el sidebar sepa cuál pintar de azul 
+         y 'setSelected' para cambiar la opción 
+      */}
+      <Sidebar onSelect={setSelected} selectedOption={selected} />
+      
+      <div className="dashboard-content">
         {renderContent()}
       </div>
     </div>
   );
 }
-
-const styles = {
-  layout: {
-    display: "flex",
-    backgroundColor: "#f7f3ee",
-    height: "100vh"
-  },
-  content: {
-    flex: 1,
-    overflowY: "auto",
-    padding: "20px"
-  }
-};

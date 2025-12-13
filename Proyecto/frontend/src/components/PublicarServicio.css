@@ -1,0 +1,123 @@
+/* PublishService.css */
+
+/* Contenedor principal que centra el formulario */
+.publish-wrapper {
+  display: flex;
+  justify-content: center;
+  padding-top: 20px;
+  padding-bottom: 50px;
+  width: 100%;
+}
+
+/* La tarjeta blanca elegante */
+.publish-card {
+  background-color: white;
+  padding: 40px;
+  width: 100%;
+  max-width: 600px; /* Un poco más ancho que el login para que quepa todo */
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.publish-card h2 {
+  margin-bottom: 30px;
+  color: #333;
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+  border-bottom: 2px solid #f3f6fb;
+  padding-bottom: 15px;
+}
+
+/* Estilo para los grupos de inputs (Label + Input) */
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+/* Estilo unificado para inputs, textareas y selects */
+.form-input, 
+.form-select, 
+.form-textarea {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  background-color: #fafafa;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.form-textarea {
+  min-height: 100px;
+  resize: vertical; /* Permite cambiar el tamaño solo verticalmente */
+}
+
+.form-input:focus, 
+.form-select:focus, 
+.form-textarea:focus {
+  border-color: #0066ff;
+  background-color: white;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1);
+}
+
+/* Checkbox especial */
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 20px 0;
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #eee;
+}
+
+.checkbox-group label {
+  margin: 0;
+  cursor: pointer;
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #0066ff;
+}
+
+/* Grid para poner campos lado a lado (ej. Horas) */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* Botón principal */
+.publish-btn {
+  width: 100%;
+  padding: 15px;
+  background-color: #0066ff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+.publish-btn:hover {
+  background-color: #0052cc;
+}
