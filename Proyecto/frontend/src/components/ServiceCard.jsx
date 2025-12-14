@@ -1,5 +1,5 @@
 import React from "react";
-import "./ServiceCard.css";
+import './Styles/ServiceCard.css';
 
 function formatTime(timeValue) {
   if (!timeValue) return "";

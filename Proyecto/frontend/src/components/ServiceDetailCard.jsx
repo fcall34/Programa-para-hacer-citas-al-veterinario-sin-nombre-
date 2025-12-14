@@ -1,5 +1,5 @@
 import React from "react";
-import "./ServiceDetailCrd.css";
+import './Styles/ServiceDetailCrd.css'
 
 
 function formatTime(timeValue) {

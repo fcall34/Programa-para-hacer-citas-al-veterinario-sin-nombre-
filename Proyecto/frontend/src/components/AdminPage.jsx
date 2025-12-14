@@ -3,7 +3,7 @@ import AdminSideBar from "./adminSideBar";
 import AdminAddAdmin from "./AdminAddAdmin";
 import AdminViewUsers from "./AdminViewUsers";
 import AdminViewServices from "./AdminviewServices";
-import "./Admin.css"
+import "./Styles/Admin.css"
 
 export default function AdminPage() {
   const [section, setSection] = useState("users");

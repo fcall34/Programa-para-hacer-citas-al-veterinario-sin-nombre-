@@ -5,8 +5,6 @@ import crypto from "crypto";
 import { getResendClient } from "../Utils/Mailer.js";
 
 
-const JWT_SECRET = "super";
-
 
 export const register = async (req, res)=>{
   const { full_name, email, phone, location, password, user_type } = req.body;
@@ -61,8 +59,6 @@ export const register = async (req, res)=>{
       `
     });
 
-    console.log("response correo", response);
-
     res.status(201).send({
       success: true,
       message: 'Usuario registrado'
@@ -90,19 +86,24 @@ export const login = async(req, res) =>{
 
     const user = result.recordset[0];
 
-    
-     const passwordMatch = await bcrypt.compare(password, user.password_hash);
-      
-
-    if (!passwordMatch) {
-      return res.json({ success: false, message: 'Contraseña incorrecta' });
+    const valid = await bcrypt.compare(password, user.password_hash);
+    if (!valid) {
+      return res.status(401).json({ success: false, message: "Credenciales inválidas" });
     }
+
+    if (!user.email_verified) {
+    return res.status(403).json({
+      success: false,
+      message: "Debes verificar tu correo antes de iniciar sesión"
+    });
+  }
 
     const token = jwt.sign({
       id: user.user_id,
-      tipo: user.user_type
+      user_type: user.user_type,
+      email_verified: user.email_verified
 
-    }, JWT_SECRET, {expiresIn: "1h"});
+    }, process.env.JWT_SECRET, {expiresIn: "1h"});
 
     await pool.request()
       .input("token", sql.VarChar, token)

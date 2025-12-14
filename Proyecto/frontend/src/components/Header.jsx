@@ -1,15 +1,14 @@
 import React from "react";
-import { useNavigate } from "react-router-dom"; // <--- 1. ¡IMPORTANTE!
-import "./Header.css";
-import LogoutButton from "./logout"; // Asegúrate que el nombre del archivo sea correcto (logout o LogoutButton)
+import { useNavigate } from "react-router-dom"; 
+import './Styles/Header.css';
+import LogoutButton from "./logout"; 
 
 export default function Header({ onViewAppointments }) {
   
-  const navigate = useNavigate(); // <--- 2. ¡OBLIGATORIO! Sin esto, 'navigate' no existe
+  const navigate = useNavigate(); 
 
   return (
     <header className="header-container">
-      {/* Al dar clic al título, nos lleva al inicio */}
       <h1 
         className="header-title" 
         onClick={() => navigate('/ClientHome')} 

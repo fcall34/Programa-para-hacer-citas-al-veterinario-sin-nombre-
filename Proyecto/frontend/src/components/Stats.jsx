@@ -1,5 +1,5 @@
 import React from "react";
-import "./Stats.css";
+import './Styles/Stats.css';
 
 export default function Stats() {
   // Datos de ejemplo (luego vendrán de tu BD)

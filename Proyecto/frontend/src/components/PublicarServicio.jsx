@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./PublicarServicio.css"; // <--- 1. Importar los estilos nuevos
+import './Styles/PublicarServicio.css';
 
 export default function PublicarServicio() {
   const [formData, setFormData] = useState({
@@ -7,7 +7,7 @@ export default function PublicarServicio() {
     description: "",
     cost: "",
     location: "",
-    available: true, // Cambié a true por defecto, tiene más sentido
+    available: true, 
     category_id: "",
     expiration_date: "",
     start_time: "",

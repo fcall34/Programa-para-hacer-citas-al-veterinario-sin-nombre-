@@ -1,6 +1,6 @@
 import React from "react";
 import LogoutButton from "./logout";
-import "./sidebar.css";
+import './Styles/sidebar.css';
 
 export default function Sidebar({ onSelect, selectedOption }) {
   

@@ -5,7 +5,7 @@ import ServiceDetailCard from "../components/ServiceDetailCard.jsx";
 import Header from "../components/Header.jsx";
 import ScheduleMenu from "./ScheduleMenu";
 import AppointmentsList from "./AppointmentList.jsx";
-import "./ClientHome.css";
+import './Styles/ClientHome.css';
 
 export default function HomeClient() {
 

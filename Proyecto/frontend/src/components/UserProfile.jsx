@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./UserProfile.css"; // Ahorita creamos el CSS
-import Header from "./Header"; // Reusamos tu Header
+import './Styles/UserProfile.css';
+import Header from "./Header"; 
 
 export default function UserProfile() {
   const [user, setUser] = useState(null);

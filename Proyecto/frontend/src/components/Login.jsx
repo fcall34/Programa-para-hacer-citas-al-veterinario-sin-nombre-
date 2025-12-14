@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom'; // <--- 1. AQUÍ AGREGUÉ 'Link'
-import './Login.css';
+import './Styles/Login.css'
 
 export default function Login() {
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./ScheduleMenu.css";
+import './Styles/ScheduleMenu.css'
 
 export default function ScheduleMenu({ service, onClose }) {
 

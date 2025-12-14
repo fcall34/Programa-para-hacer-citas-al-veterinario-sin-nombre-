@@ -32,9 +32,6 @@ app.use(cors({
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-// API usuarios
-console.log("Contenido de userRoutes:", userRoutes);
-
 app.use('/api', userRoutes);
 
 // Servir React

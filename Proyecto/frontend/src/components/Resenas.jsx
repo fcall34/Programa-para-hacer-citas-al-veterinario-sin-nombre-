@@ -1,5 +1,5 @@
 import React from "react";
-import "./Resenas.css";
+import './Styles/Resenas.css'
 
 export default function Resenas() {
   // Datos dummy

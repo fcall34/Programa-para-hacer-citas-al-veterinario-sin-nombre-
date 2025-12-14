@@ -1,9 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './Landing.css'; // <--- No olvides importar el CSS
+import './Styles/Landing.css';
 
-// Si quieres usar iconos reales, tendrías que instalar 'react-icons'
-// Por ahora usaré texto simulando iconos para que no te de error.
 
 export default function Landing() {
   return (
