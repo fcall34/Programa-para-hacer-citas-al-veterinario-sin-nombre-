@@ -6,15 +6,12 @@ import { getAllServices, getServiceById } from "../Controllers/Client.Controller
 import { createAppointment, getAppointments } from "../Controllers/Appointment.Controllers.js"
 import {publishService, ViewAllAppointments, UpdateAppointmentStatus} from "../Controllers/Provider.Controllers.js"
 import {adminGetAllUsers, adminGetAllServices, adminDeleteUser, adminDeleteService, adminCreateUser} from "../Controllers/Admin.Controllers.js"
-import { logoutUser } from "../Controllers/Auth.Controllers.js";
+import { register, login, logoutUser, verifyEmail } from "../Controllers/Auth.Controllers.js";
 
 const JWT_SECRET = "super";
 const router = express.Router();
 
 function verifyToken(req, res, next) {
-  console.log("HEADERS RECIBIDOS:", req.headers);
-  console.log("Authorization header:", req.headers["authorization"]);
-
   const authHeader = req.headers["authorization"];
 
   if (!authHeader) {
@@ -48,99 +45,10 @@ router.get("/services", verifyToken, getAllServices);
 router.get("/services/:id", verifyToken, getServiceById);
 
 // POST /register
-router.post('/register', async (req, res) => {
-  const { full_name, email, phone, location, password, user_type } = req.body;
-
-  if (!full_name || !email || !password || !user_type) {
-    return res.status(400).send({ success: false, message: 'Faltan datos obligatorios' });
-  }
-
-  try {
-    const pool = await poolPromise;
-
-    const password_hash = await bcrypt.hash(password, 10);
-
-    await pool.request()
-      .input('full_name', sql.NVarChar(100), full_name)
-      .input('email', sql.NVarChar(100), email)
-      .input('phone', sql.NVarChar(20), phone)
-      .input('location', sql.NVarChar(200), location)
-      .input('password_hash', sql.NVarChar(255), password_hash)
-      .input('user_type', sql.Int, user_type)
-      .query(`
-        INSERT INTO Users (full_name, email, phone, location, password_hash, user_type)
-        VALUES (@full_name, @email, @phone, @location, @password_hash, @user_type)
-      `);
-
-    res.status(201).send({
-      success: true,
-      message: 'Usuario registrado'
-    });
-
-  } catch (err) {
-    console.error(err);
-    res.status(500).send({ success: false, message: 'Error en el servidor' });
-  }
-});
-
-
+router.post('/register', register);
 
 // POST /login
-router.post('/login', async (req, res) => {
-  const { email, password } = req.body;
-
-  try {
-    const pool = await poolPromise
-
-    const result = await pool.request()
-      .input('email', sql.NVarChar(100), email)
-      .query('SELECT * FROM Users WHERE email = @email');
-
-    if (result.recordset.length === 0) {
-      return res.json({ success: false, message: 'Usuario no encontrado' });
-    }
-
-    const user = result.recordset[0];
-
-    
-     const passwordMatch = await bcrypt.compare(password, user.password_hash);
-      
-
-    if (!passwordMatch) {
-      return res.json({ success: false, message: 'Contraseña incorrecta' });
-    }
-
-    const token = jwt.sign({
-      id: user.user_id,
-      tipo: user.user_type
-
-    }, JWT_SECRET, {expiresIn: "1h"});
-
-    await pool.request()
-      .input("token", sql.VarChar, token)
-      .input("id", sql.Int, user.user_id)
-      .query("UPDATE [dbo].[Users] SET SessionToken = @token WHERE user_id = @id");
-
-    const redirect = user.user_type
-
-    // Login exitoso
-    res.json({
-      success: true,
-      message: "Login exitoso",
-      user: {
-        id: user.user_id,
-        user_type: user.user_type
-      },
-      redirect,
-      token
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false, message: 'Error al iniciar sesión' });
-  }
-});
-
-
+router.post('/login', login);
 
 
 //post crear servicio
@@ -170,6 +78,10 @@ router.post("/admin/create-user", verifyToken, adminCreateUser);
 
 //logout
 router.post("/logout", verifyToken, logoutUser);
+
+//verifyemail
+router.get("/verify-email/:token", verifyEmail);
+
 
 
 

@@ -1,10 +1,28 @@
 import { poolPromise, sql } from "../database.js";
+import {generateTicketPDF}  from "../Utils/TicketCita.js"
+import { getResendClient } from "../Utils/Mailer.js"
+
 
 // Crear una cita
 export const createAppointment = async (req, res) => {
   try {
     const { service_id, appointment_date } = req.body;
     const client_id = req.user.id;
+
+    const pool = await poolPromise;
+
+    const userRes = await pool.request()
+    .input("user_id", sql.Int,client_id)
+    .query("SELECT full_name, email from dbo.Users WHERE user_id =@user_id");
+
+    if(userRes.recordset.length == 0){
+      return res.status(404).json({
+      success: false,
+      message: "Usuario no encontrado"
+      });
+    }
+
+    const {full_name, email} = userRes.recordset[0];
 
     if (!service_id || !appointment_date) {
       return res.status(400).json({
@@ -13,23 +31,24 @@ export const createAppointment = async (req, res) => {
       });
     }
 
-    const pool = await poolPromise;
-
     // Obtener datos del servicio
     const serviceRes = await pool.request()
       .input("service_id", sql.Int, service_id)
       .query(`
-        SELECT provider_id, expiration_date, start_time, end_time
+        SELECT provider_id, title, expiration_date, start_time, end_time
         FROM dbo.Services
         WHERE service_id = @service_id
       `);
+
+
 
     if (serviceRes.recordset.length === 0) {
       return res.status(404).json({ success: false, message: "Servicio no encontrado" });
     }
 
-    const { provider_id, expiration_date, start_time, end_time } =
+    const { provider_id, title, expiration_date, start_time, end_time } =
       serviceRes.recordset[0];
+
 
     // Validar fecha límite
     const dateOnly = appointment_date.split("T")[0];
@@ -53,7 +72,7 @@ export const createAppointment = async (req, res) => {
     }
 
     // Crear cita
-    await pool.request()
+    const insertRes = await pool.request()
       .input("Appointment_date", sql.DateTime, appointment_date)
       .input("provider_id", sql.Int, provider_id)
       .input("client_id", sql.Int, client_id)
@@ -68,6 +87,7 @@ export const createAppointment = async (req, res) => {
           service_id,
           Appointment_time
         )
+          OUTPUT INSERTED.Appointment_id
         VALUES (
           @provider_id,
           @client_id,
@@ -77,6 +97,40 @@ export const createAppointment = async (req, res) => {
           @Appointment_time
         )
       `);
+
+    const appointmentId = insertRes.recordset[0].Appointment_id;
+
+    const pdfBuffer = await generateTicketPDF({
+      appointmentId,
+      serviceName: title,
+      appointmentDate: expiration_date
+    });
+
+    const resend = getResendClient();
+
+      try {
+        const response = await resend.emails.send({
+          from: process.env.EMAIL_FROM,
+          to: email,
+          subject: "Ticket de tu cita",
+          html: `
+            <h2>Tu cita fue agendada correctamente</h2>
+            <p>Adjuntamos el ticket de tu cita.</p>
+            <p><strong>Folio:</strong> ${appointmentId}</p>
+          `,
+          attachments: [
+            {
+              filename: `ticket-${appointmentId}.pdf`,
+              content: pdfBuffer
+            }
+          ],
+        });
+
+        console.log("Respuesta de Resend:", response);
+
+    } catch (mailError) {
+      console.error("Error enviando correo:", mailError);
+    }
 
     return res.json({ success: true, message: "Cita creada correctamente" });
 

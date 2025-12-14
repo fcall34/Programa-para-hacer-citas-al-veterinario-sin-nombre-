@@ -8,6 +8,7 @@ import ProveedorDashBoard from './components/ProveedorDashBoard.jsx';
 import ClientHome from './components/ClientHome.jsx'
 import AdminDashboard from './components/AdminPage.jsx'
 import UserProfile from "./components/UserProfile.jsx";
+import VerifyEmail from './components/VerifyEmail.jsx';
 
 function App() {
   return (
@@ -21,6 +22,8 @@ function App() {
         <Route path='/ClientHome' element={<ClientHome/>}/>
         <Route path='/AdminDashboard' element={<AdminDashboard/>}/>
         <Route path="/profile" element={<UserProfile />} />
+        <Route path="/verify-email/:token" element={<VerifyEmail />} />
+
       </Routes>
     </BrowserRouter>
   );
