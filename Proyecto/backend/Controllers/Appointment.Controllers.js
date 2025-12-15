@@ -177,4 +177,104 @@ export const getAppointments = async (req, res) => {
   }
 };
 
+export const getAcceptedAppointmentsByProvider = async (req, res) => {
+  try {
+    const providerId = req.user.id;
+
+    const pool = await poolPromise;
+
+    const result = await pool.request()
+      .input("provider_id", sql.Int, providerId)
+      .query(`
+        SELECT 
+          a.Appointment_id,
+          a.Appointment_date,
+          a.Appointment_status,
+          a.is_complete,
+          s.title AS service_name,
+          u.full_name AS client_name,
+          u.phone AS client_phone,
+          u.email AS client_email
+        FROM Appointments a
+        JOIN Services s ON a.service_id = s.service_id
+        JOIN Users u ON a.client_id = u.user_id
+        WHERE 
+          a.provider_id = @provider_id
+          AND a.Appointment_status = 1
+        ORDER BY a.Appointment_date ASC
+
+      `);
+
+    res.json({
+      success: true,
+      appointments: result.recordset
+    });
+
+  } catch (error) {
+    console.error("Error obteniendo citas aceptadas:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error del servidor"
+    });
+  }
+};
+
+export const completeAppointment = async (req, res) => {
+  const { folio } = req.body;
+  const providerId = req.user.id;
+
+  if (!folio) {
+    return res.status(400).json({
+      success: false,
+      message: "Folio requerido"
+    });
+  }
+
+  try {
+    const pool = await poolPromise;
+
+    // 1️⃣ Validar cita
+    const appointmentRes = await pool.request()
+      .input("appointment_id", sql.Int, folio)
+      .input("provider_id", sql.Int, providerId)
+      .query(`
+        SELECT *
+        FROM Appointments
+        WHERE appointment_id = @appointment_id
+          AND provider_id = @provider_id
+          AND appointment_status = 1
+          AND is_complete = 0
+      `);
+
+    if (appointmentRes.recordset.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Folio inválido, cita no aceptada o ya completada"
+      });
+    }
+
+    // 2️⃣ Marcar como completada
+    await pool.request()
+      .input("appointment_id", sql.Int, folio)
+      .query(`
+        UPDATE Appointments
+        SET is_complete = 1
+        WHERE appointment_id = @appointment_id
+      `);
+
+    return res.json({
+      success: true,
+      message: "Cita completada correctamente"
+    });
+
+  } catch (error) {
+    console.error("Error completando cita:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error del servidor"
+    });
+  }
+};
+
+
 

@@ -9,7 +9,7 @@ from "../Controllers/Client.Controllers.js";
 /* ================================
    CONTROLADORES CITAS
    ================================ */
-import { createAppointment, getAppointments } 
+import { createAppointment, getAppointments, getAcceptedAppointmentsByProvider, completeAppointment } 
 from "../Controllers/Appointment.Controllers.js";
 
 /* ================================
@@ -127,6 +127,13 @@ router.get(
 
 // cambiar estado cita
 router.put("/provider/status/:id", verifyToken, UpdateAppointmentStatus);
+
+//ver citas aceptadas
+router.get("/provider/accepted",verifyToken,requireRole(ROLES.PROVIDER),getAcceptedAppointmentsByProvider);
+//completar citas 
+router.put("/provider/complete",verifyToken,requireRole(ROLES.PROVIDER),completeAppointment);
+
+
 
 
 /* ================================

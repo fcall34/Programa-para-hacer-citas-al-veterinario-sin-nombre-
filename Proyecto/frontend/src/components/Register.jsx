@@ -2,6 +2,36 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Styles/Register.css';
 
+const CIUDADES_MEXICO = [
+  "Aguascalientes",
+  "Cancún",
+  "Celaya",
+  "Chihuahua",
+  "Ciudad de México",
+  "Ciudad Juárez",
+  "Cuernavaca",
+  "Guadalajara",
+  "Hermosillo",
+  "León",
+  "Mérida",
+  "Monterrey",
+  "Morelia",
+  "Pachuca",
+  "Puebla",
+  "Querétaro",
+  "Saltillo",
+  "San Luis Potosí",
+  "Tijuana",
+  "Toluca",
+  "Torreón",
+  "Tuxtla Gutiérrez",
+  "Veracruz",
+  "Villahermosa",
+  "Xalapa",
+  "Zacatecas"
+];
+
+
 export default function Register() {
   const [form, setForm] = useState({
     full_name: '',
@@ -55,14 +85,14 @@ export default function Register() {
         
         <form onSubmit={handleSubmit}>
           <input 
-            className="register-input" // <-- Clase añadida
+            className="register-input"
             name="full_name" 
             placeholder="Nombre completo" 
             onChange={handleChange} 
             required 
           />
           <input 
-            className="register-input" // <-- Clase añadida
+            className="register-input" 
             name="email" 
             type="email"
             placeholder="Correo electrónico" 
@@ -70,29 +100,36 @@ export default function Register() {
             required 
           />
           <input 
-            className="register-input" // <-- Clase añadida
+            className="register-input" 
             name="phone" 
             placeholder="Teléfono" 
             onChange={handleChange} 
           />
+          <select
+            className="register-input"
+            name="location"
+            value={form.location}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Selecciona tu ciudad</option>
+            {CIUDADES_MEXICO.map(ciudad => (
+              <option key={ciudad} value={ciudad}>
+                {ciudad}
+              </option>
+            ))}
+          </select>
+
           <input 
-            className="register-input" // <-- Clase añadida
-            name="location" 
-            placeholder="Ubicación (Ciudad)" 
-            onChange={handleChange} 
-          />
-          <input 
-            className="register-input" // <-- Clase añadida
+            className="register-input" 
             type="password" 
             name="password" 
             placeholder="Contraseña" 
             onChange={handleChange} 
             required 
           />
-
-          {/* El select también usa la misma clase de input */}
           <select 
-            className="register-input" // <-- Clase añadida
+            className="register-input"
             name="user_type" 
             onChange={handleChange} 
             value={form.user_type}

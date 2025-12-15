@@ -4,6 +4,7 @@ import CitasEnEspera from "../components/CitasEnEspera.jsx";
 import Stats from "../components/Stats.jsx"; // <--- Importar Stats
 import Resenas from "../components/Resenas.jsx";
 import PublishService from "../components/PublicarServicio.jsx";
+import CompleteAppointment from "./CompleteAppointment.jsx";
 import './Styles/ProveedorDashBoard.css';
 
 export default function ProveedorDashBoard() {
@@ -16,6 +17,8 @@ export default function ProveedorDashBoard() {
         return <PublishService />;
       case "citas":
         return <CitasEnEspera />;
+      case "Complete-citas":
+        return <CompleteAppointment/>;
       case "stats":
         return <Stats />;
       case "resenas":

@@ -26,7 +26,13 @@ export default function Sidebar({ onSelect, selectedOption }) {
         Citas en espera
       </button>
 
-      {/* AQUÍ CAMBIAMOS CANCELACIONES POR STATS */}
+      <button 
+        className={getButtonClass("Complete-citas")} 
+        onClick={() => onSelect("Complete-citas")}
+      >
+        Completar citas
+      </button>
+
       <button 
         className={getButtonClass("stats")} 
         onClick={() => onSelect("stats")}
