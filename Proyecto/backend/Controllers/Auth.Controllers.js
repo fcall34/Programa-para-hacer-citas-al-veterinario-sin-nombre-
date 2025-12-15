@@ -49,7 +49,7 @@ export const register = async (req, res)=>{
 
       const response = await resend.emails.send({
       from: process.env.EMAIL_FROM,
-      to: "calleja.jimenez.fernando.yahir@gmail.com",
+      to: "itztlidlr@gmail.com",
       subject: "Verifica tu correo",
       html: `
         <h2>Bienvenido</h2>
@@ -58,6 +58,7 @@ export const register = async (req, res)=>{
         <p>Este enlace expira en 24 horas</p>
       `
     });
+    console.log("respuesta:", response);
 
     res.status(201).send({
       success: true,
@@ -213,6 +214,69 @@ export const verifyEmail = async (req, res) => {
       message: "Error del servidor"
     });
   }
+
+
+  
+
+
+};
+
+/* ==============================================
+   FUNCIÓN 1: OBTENER PERFIL (Con todos los datos)
+   ============================================== */
+export const profile = async (req, res) => {
+  try {
+
+    console.log("🟢 USER DEL TOKEN:", req.user);
+    console.log("🟢 ID USUARIO:", req.user?.id);
+
+    const userId = req.user.id;
+    
+    const pool = await poolPromise;
+    
+    // 2. Buscamos TODOS los datos importantes: email, phone, location
+    const result = await pool.request()
+      .input('id', sql.Int, userId)
+      .query('SELECT user_id, full_name, email, phone, location, user_type FROM Users WHERE user_id = @id');
+
+    if (result.recordset.length === 0) {
+      return res.status(404).json({ success: false, message: "Usuario no encontrado" });
+    }
+
+    // 3. Enviamos el usuario completo al Frontend
+    res.json({
+      success: true,
+      user: result.recordset[0]
+    });
+
+  } catch (error) {
+    console.error("Error en profile:", error);
+    res.status(500).json({ success: false, message: "Error al obtener perfil" });
+  }
 };
 
 
+/* ==============================================
+   FUNCIÓN 2: ACTUALIZAR UBICACIÓN
+   ============================================== */
+export const updateLocation = async (req, res) => {
+  const { location } = req.body;
+  
+  // El ID del usuario viene del token
+  const userId = req.user.id; 
+
+  try {
+    const pool = await poolPromise;
+    
+    await pool.request()
+      .input("location", sql.NVarChar(200), location)
+      .input("id", sql.Int, userId)
+      .query("UPDATE Users SET location = @location WHERE user_id = @id");
+
+    res.json({ success: true, message: "Ubicación actualizada correctamente" });
+
+  } catch (error) {
+    console.error("Error en updateLocation:", error);
+    res.status(500).json({ success: false, message: "Error al actualizar ubicación" });
+  }
+};

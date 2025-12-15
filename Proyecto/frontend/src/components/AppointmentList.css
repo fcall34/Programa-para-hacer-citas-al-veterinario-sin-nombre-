@@ -1,0 +1,150 @@
+/* Layout general */
+.appointments-layout {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: transparent; /* Se integra con el fondo de Home */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.section-title {
+    font-size: 1.8rem;
+    color: #2c3e50;
+    margin-bottom: 2rem;
+    border-bottom: 3px solid #6c63ff; /* Color morado principal */
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+/* Grid adaptable */
+.appointments-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+/* --- TARJETA --- */
+.appointment-card {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05); /* Sombra suave */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.appointment-card:hover {
+    transform: translateY(-5px); /* Efecto de elevación al pasar el mouse */
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+/* Header de la tarjeta */
+.card-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #f5f5f5;
+    padding-bottom: 10px;
+}
+
+.service-name {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #333;
+    margin: 0;
+    line-height: 1.2;
+}
+
+/* BADGES (Etiquetas de estado) */
+.status-badge {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+/* Colores según tu lógica 0, 1, 2 */
+.status-pending { 
+    background-color: #fff7ed; 
+    color: #c2410c; 
+    border: 1px solid #ffedd5;
+} /* Naranja para pendiente */
+
+.status-accepted { 
+    background-color: #ecfdf5; 
+    color: #047857; 
+    border: 1px solid #d1fae5;
+} /* Verde para aceptada */
+
+.status-rejected { 
+    background-color: #fef2f2; 
+    color: #b91c1c; 
+    border: 1px solid #fee2e2;
+} /* Rojo para rechazada */
+
+.status-default { 
+    background-color: #f3f4f6; 
+    color: #4b5563; 
+}
+
+/* Cuerpo */
+.card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #555;
+    font-size: 0.95rem;
+}
+
+.icon {
+    font-size: 1.1rem;
+}
+
+.info-text {
+    font-weight: 500;
+}
+
+/* Footer y botón */
+.card-footer {
+    margin-top: auto;
+}
+
+.btn-details {
+    width: 100%;
+    padding: 10px;
+    background-color: #6c63ff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-details:hover {
+    background-color: #5a52d5;
+}
+
+/* Estados de carga y vacío */
+.loading-container, .empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-size: 1.1rem;
+    background: rgba(255,255,255,0.8);
+    border-radius: 12px;
+}
