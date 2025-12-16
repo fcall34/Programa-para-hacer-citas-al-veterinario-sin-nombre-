@@ -52,6 +52,11 @@ import {createReview, getProviderReviews} from "../Controllers/Review.Controller
 
 const router = express.Router();
 
+app.get("/api/health", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
+
 router.get("/provider/misreviews",verifyToken, requireRole(ROLES.PROVIDER), getProviderReviews);
 router.get("/provider/stats",verifyToken,requireRole(ROLES.PROVIDER),getProviderStats);
 
