@@ -27,18 +27,16 @@ app.use(cors({
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-app.use('/api', userRoutes);
-
-// Servir React
-const frontendPath = path.join(__dirname, '../frontend/build'); // <-- aquí
-app.use(express.static(frontendPath));
-app.get(/.*/, (req, res) => {
-  res.sendFile('index.html', { root: frontendPath });
-});
 
 app.get("/api/health", (req, res) => {
   res.status(200).json({ status: "ok" });
 });
+
+app.use('/api', userRoutes);
+
+//healtcheck
+
+
 
 app.listen(PORT, () => console.log(`Servidor corriendo en http://localhost:${PORT}`));
 
