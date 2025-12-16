@@ -1,0 +1,128 @@
+/* Landing.css */
+
+/* 1. El contenedor principal: Ocupa toda la pantalla */
+.landing-wrapper {
+  min-height: 100vh;
+  width: 100%;
+  /* Un degradado suave en azulito claro en lugar de la tela beige */
+  background: linear-gradient(135deg, #f3f6fb 0%, #eef2f9 100%);
+  display: flex;
+  flex-direction: column;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+/* 2. Barra de Navegación (Header) */
+.landing-header {
+  display: flex;
+  justify-content: space-between; /* Logo a la izq, Botones a la der */
+  align-items: center;
+  padding: 20px 40px;
+  background-color: transparent; /* Transparente para que se vea elegante */
+}
+
+.logo-text {
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: 2px; /* Letras separadas para elegancia */
+  text-transform: uppercase;
+  color: #444;
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+/* Enlaces del menú (Login/Registro) */
+.nav-link {
+  text-decoration: none;
+  color: #555;
+  font-weight: 500;
+  font-size: 14px;
+  transition: color 0.3s;
+}
+
+.nav-link:hover {
+  color: #0066ff;
+}
+
+/* 3. Sección Principal (Hero) */
+.hero-section {
+  flex: 1; /* Ocupa el resto del espacio disponible */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 20px;
+  animation: fadeIn 1.5s ease-out; /* Animación suave al entrar */
+}
+
+/* EL TÍTULO ELEGANTE (Tipo la imagen "A point date!") */
+.hero-title {
+  /* Usamos una fuente con serifa para que se vea "fino" */
+  font-family: 'Georgia', 'Times New Roman', serif; 
+  font-size: 4rem; /* Muy grande */
+  font-weight: 400; /* Letra delgada, no negrita tosca */
+  color: #2c3e50;
+  margin-bottom: 10px;
+  letter-spacing: -1px;
+}
+
+.hero-subtitle {
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 40px;
+  font-weight: 300;
+  max-width: 500px;
+  line-height: 1.6;
+}
+
+/* 4. El Botón Principal (Píldora) */
+.cta-button {
+  background-color: white;
+  color: #333;
+  padding: 15px 40px;
+  border-radius: 50px; /* Bordes totalmente redondos */
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05); /* Sombra suave */
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.cta-button:hover {
+  transform: translateY(-3px); /* Se eleva un poquito */
+  box-shadow: 0 15px 30px rgba(0, 102, 255, 0.15);
+  color: #0066ff; /* Letras azules al pasar el mouse */
+  border-color: #0066ff;
+}
+
+/* 5. Iconos sociales o pie de página */
+.landing-footer {
+  padding: 30px;
+  text-align: center;
+  font-size: 24px;
+  color: #888;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+/* Animación de entrada */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Ajuste para celulares */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 3rem;
+  }
+}

@@ -1,0 +1,24 @@
+.logout-btn {
+  background-color: #d63031;      /* rojo elegante */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.25s ease, transform 0.2s ease;
+  display: inline-block;
+  margin: 10px 0;
+}
+
+/* Hover */
+.logout-btn:hover {
+  background-color: #b71c1c;
+  transform: scale(1.03);
+}
+
+/* Click */
+.logout-btn:active {
+  transform: scale(0.97);
+  background-color: #a31616;
+}

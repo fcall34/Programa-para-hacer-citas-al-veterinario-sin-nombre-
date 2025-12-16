@@ -1,0 +1,75 @@
+/* Login.css */
+
+/* Fondo general que ocupa toda la pantalla y centra el contenido */
+.login-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f3f6fb; /* Mismo color que tu ClientHome */
+}
+
+/* La tarjeta blanca del login */
+.login-card {
+  background-color: white;
+  padding: 40px;
+  width: 100%;
+  max-width: 400px; /* Ancho máximo para que no se vea gigante */
+  border-radius: 12px; /* Bordes redondeados */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08); /* Sombra suave y moderna */
+  text-align: center;
+}
+
+/* Título */
+.login-card h2 {
+  margin-bottom: 30px;
+  color: #333;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+/* Estilo de los inputs (cajas de texto) */
+.login-input {
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  outline: none;
+  transition: all 0.3s ease;
+  background-color: #fafafa;
+  box-sizing: border-box; /* Importante para que el padding no rompa el ancho */
+}
+
+/* Efecto cuando das clic en el input */
+.login-input:focus {
+  border-color: #0066ff; /* Azul profesional */
+  background-color: white;
+  box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1);
+}
+
+/* Botón de entrar */
+.login-btn {
+  width: 100%;
+  padding: 14px;
+  background-color: #0066ff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-btn:hover {
+  background-color: #0052cc; /* Un azul un poco más oscuro al pasar el mouse */
+}
+
+/* Opcional: Texto pequeño para registro */
+.login-footer {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #666;
+}

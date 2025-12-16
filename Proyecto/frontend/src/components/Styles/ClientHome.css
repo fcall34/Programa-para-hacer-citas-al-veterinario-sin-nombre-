@@ -1,0 +1,40 @@
+.home-wrapper {
+  display: flex;
+  flex-direction: column;
+  background-color: #f3f6fb;
+  min-height: 100vh;
+}
+
+/* Contenedor principal debajo del header */
+.home-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 10px 20px;
+}
+
+/* Buscador centrado */
+.top-area {
+  margin-top: 20px;
+  margin-bottom: 25px;
+}
+
+/* Layout principal */
+.content-area {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr; /* izquierda más chica, derecha más grande */
+  gap: 30px;
+}
+
+/* Tarjetas del lado izquierdo */
+.left-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Detalle grande del lado derecho */
+.right-column {
+  display: flex;
+  flex-direction: column;
+}

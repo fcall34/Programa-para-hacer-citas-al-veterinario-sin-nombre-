@@ -1,0 +1,45 @@
+/* Resenas.css */
+
+.reviews-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.review-card {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  margin-bottom: 20px;
+  transition: background-color 0.2s;
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.reviewer-name {
+  font-weight: 700;
+  font-size: 16px;
+  color: #333;
+}
+
+.review-date {
+  font-size: 13px;
+  color: #999;
+}
+
+.star-rating {
+  color: #ffc107; /* Color dorado para estrellas */
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.review-text {
+  color: #555;
+  line-height: 1.5;
+  font-size: 15px;
+}

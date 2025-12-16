@@ -1,0 +1,68 @@
+/* Sidebar.css */
+
+.sidebar-container {
+  width: 280px;
+  height: 100vh;
+  background-color: white;
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+
+  /* 🔑 CLAVE: evitamos herencias raras */
+  color: #333;
+}
+
+/* Título */
+.sidebar-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+/* Botones */
+.sidebar-btn {
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  padding: 15px 20px;
+  border-radius: 12px;
+
+  color: #333 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+
+  display: flex;
+  align-items: center;
+
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Hover */
+.sidebar-btn:hover {
+  background-color: #f0f7ff;
+  color: #0066ff !important;
+}
+
+/* Activo */
+.sidebar-btn.active {
+  background-color: #0066ff;
+  color: white !important;
+  box-shadow: 0 4px 12px rgba(0, 102, 255, 0.3);
+}
+
+/* Footer */
+.sidebar-footer {
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}

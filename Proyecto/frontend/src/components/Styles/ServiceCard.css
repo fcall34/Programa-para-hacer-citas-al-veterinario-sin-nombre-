@@ -1,0 +1,47 @@
+.service-card {
+  background: white;
+  border: 2px solid #E1D6CF;
+  border-radius: 18px;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.service-card:hover {
+  transform: translateY(-3px);
+}
+
+.service-card h3 {
+  margin: 0;
+  color: #6B564E;
+}
+
+.stars {
+  color: #B88976;
+  margin-top: 5px;
+}
+
+.category {
+  font-weight: bold;
+  margin-top: 8px;
+}
+
+.price {
+  font-weight: bold;
+  margin-top: 8px;
+}
+
+.schedule, .distance {
+  color: #6B564E;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.calendar {
+  font-size: 25px;
+  color: #B88976;
+  align-self: center;
+}
