@@ -1,5 +1,4 @@
-import dotenv from "dotenv";
-dotenv.config();
+import "./Config/env.js"
 
 import path from 'path'
 import { fileURLToPath } from 'url';
@@ -13,17 +12,13 @@ import cookieParser from 'cookie-parser';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-dotenv.config({
-  path: path.join(__dirname, ".env"),
-});
-
-
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Middlewares
 app.use(cors({
-  origin: "http://localhost:3001",
+  origin: process.env.FRONTEND_URL,
+  credentials: true,
   methods: "GET,POST,PUT,DELETE",
   allowedHeaders: "Content-Type, Authorization"
 }));
@@ -42,3 +37,4 @@ app.get(/.*/, (req, res) => {
 });
 
 app.listen(PORT, () => console.log(`Servidor corriendo en http://localhost:${PORT}`));
+
