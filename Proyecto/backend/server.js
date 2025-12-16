@@ -36,5 +36,9 @@ app.get(/.*/, (req, res) => {
   res.sendFile('index.html', { root: frontendPath });
 });
 
+app.get("/api/health", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
 app.listen(PORT, () => console.log(`Servidor corriendo en http://localhost:${PORT}`));
 
