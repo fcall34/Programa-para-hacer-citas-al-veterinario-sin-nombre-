@@ -49,7 +49,7 @@ export const register = async (req, res)=>{
 
       const response = await resend.emails.send({
       from: process.env.EMAIL_FROM,
-      to: "calleja.jimenez.fernando.yahir@gmail.com",
+      to: "itztlidlr@gmail.com",
       subject: "Verifica tu correo",
       html: `
         <h2>Bienvenido</h2>

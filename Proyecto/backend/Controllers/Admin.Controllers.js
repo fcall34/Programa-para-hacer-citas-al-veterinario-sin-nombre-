@@ -66,44 +66,58 @@ export const adminGetAllServices = async (req, res) => {
 
 
 // ============================================
-// 3. ELIMINAR UN USUARIO
+// 3. ELIMINAR UN USUARIO (Y TODOS SUS DATOS)
 // ============================================
-// Se borran también sus servicios antes (si es proveedor)
 
 export const adminDeleteUser = async (req, res) => {
   const { id } = req.params;
-  console.log(id);
 
   try {
     const pool = await poolPromise;
 
-    // 1. Borrar citas relacionadas a los servicios del usuario
-    await pool.request().query(`
-      DELETE A
-      FROM Appointments A
-      INNER JOIN Services S ON A.service_id = S.service_id
-      WHERE S.provider_id = ${id}
-    `);
+    // Usamos transaction o queries secuenciales. 
+    // Aquí secuencial para asegurar el orden de borrado.
 
-    // 2. Borrar servicios del usuario
-    await pool.request().query(`
-      DELETE FROM Services WHERE provider_id = ${id}
-    `);
+    // 1. Borrar Tokens de verificación de email (Si existen)
+    await pool.request()
+      .input('id', sql.Int, id)
+      .query(`DELETE FROM Email_Verification_Tokens WHERE user_id = @id`);
 
-    // 3. Borrar al usuario
-    await pool.request().query(`
-      DELETE FROM Users WHERE user_id = ${id}
-    `);
+    // 2. Borrar CITAS relacionadas
+    // Caso A: Citas donde el usuario es el CLIENTE
+    // Caso B: Citas donde el usuario es el PROVEEDOR
+    // Caso C: Citas vinculadas a los SERVICIOS de este usuario
+    await pool.request()
+      .input('id', sql.Int, id)
+      .query(`
+        DELETE FROM Appointments 
+        WHERE client_id = @id 
+           OR provider_id = @id
+           OR service_id IN (SELECT service_id FROM Services WHERE provider_id = @id)
+      `);
 
-    res.json({ message: "Usuario eliminado correctamente" });
+    // 3. Borrar SERVICIOS (Solo si es proveedor)
+    // Ya es seguro borrarlos porque borramos las citas arriba
+    await pool.request()
+      .input('id', sql.Int, id)
+      .query(`DELETE FROM Services WHERE provider_id = @id`);
+
+    // 4. Finalmente, BORRAR EL USUARIO
+    const result = await pool.request()
+      .input('id', sql.Int, id)
+      .query(`DELETE FROM Users WHERE user_id = @id`);
+
+    if (result.rowsAffected[0] === 0) {
+        return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    res.json({ success: true, message: "Usuario y todos sus datos eliminados correctamente" });
 
   } catch (err) {
     console.error("Error adminDeleteUser:", err);
-    res.status(500).json({ error: "Error deleting user" });
+    res.status(500).json({ success: false, message: "Error al eliminar usuario: " + err.message });
   }
 };
-
-
 
 
 // ============================================

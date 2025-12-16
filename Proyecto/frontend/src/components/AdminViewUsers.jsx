@@ -40,7 +40,7 @@ export default function AdminViewUsers() {
   if (loading) return <p>Cargando usuarios...</p>;
 
   return (
-  <div className="admin-card">
+  <div className="admin-card table-card">
   <h2 className="admin-title">Usuarios</h2>
 
   <table className="admin-table">

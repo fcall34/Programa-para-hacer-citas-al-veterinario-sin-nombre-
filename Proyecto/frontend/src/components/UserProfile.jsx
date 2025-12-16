@@ -3,18 +3,24 @@ import { useNavigate } from "react-router-dom";
 import './Styles/UserProfile.css';
 import Header from "./Header"; 
 
+// 1. Agregamos la lista de ciudades igual que en el Registro
+const CIUDADES_MEXICO = [
+  "Aguascalientes", "Cancún", "Celaya", "Chihuahua", "Ciudad de México",
+  "Ciudad Juárez", "Cuernavaca", "Guadalajara", "Hermosillo", "León",
+  "Mérida", "Monterrey", "Morelia", "Pachuca", "Puebla", "Querétaro",
+  "Saltillo", "San Luis Potosí", "Tijuana", "Toluca", "Torreón",
+  "Tuxtla Gutiérrez", "Veracruz", "Villahermosa", "Xalapa", "Zacatecas"
+];
+
 export default function UserProfile() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   
-  // Estado para saber si estamos editando
   const [isEditing, setIsEditing] = useState(false);
-  // Estado para guardar la nueva ubicación mientras escribes
   const [newLocation, setNewLocation] = useState("");
 
   const navigate = useNavigate();
 
-  // 1. Cargar datos del usuario
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -32,7 +38,7 @@ export default function UserProfile() {
         
         if (data.success) {
           setUser(data.user);
-          setNewLocation(data.user.location || ""); // Pre-llenamos el dato
+          setNewLocation(data.user.location || ""); 
         } else {
           alert("No se pudo cargar el perfil");
         }
@@ -46,7 +52,6 @@ export default function UserProfile() {
     fetchProfile();
   }, [navigate]);
 
-  // 2. Función para guardar los cambios
   const handleSaveChanges = async () => {
     try {
         const token = localStorage.getItem("token");
@@ -62,9 +67,8 @@ export default function UserProfile() {
         const data = await res.json();
 
         if (data.success) {
-            // Actualizamos el usuario en pantalla sin recargar
             setUser({ ...user, location: newLocation });
-            setIsEditing(false); // Salimos del modo edición
+            setIsEditing(false); 
             alert("Ubicación actualizada correctamente");
         } else {
             alert("Error al actualizar: " + data.message);
@@ -80,7 +84,6 @@ export default function UserProfile() {
 
   return (
     <div className="profile-page-wrapper">
-      {/* Header conectado a la navegación correcta */}
       <Header 
         onViewAppointments={() => navigate('/ClientHome')} 
         onHome={() => navigate('/ClientHome')}
@@ -100,27 +103,31 @@ export default function UserProfile() {
           <div className="profile-info-grid">
             <div className="info-item">
               <label>Correo Electrónico</label>
-              <p>{user?.email}</p> {/* Solo lectura */}
+              <p>{user?.email}</p> 
             </div>
             
             <div className="info-item">
               <label>Teléfono</label>
-              <p>{user?.phone || "--"}</p> {/* Solo lectura */}
+              <p>{user?.phone || "--"}</p> 
             </div>
             
             <div className="info-item">
               <label>Ubicación</label>
               {isEditing ? (
-                // Si estamos editando, mostramos el INPUT
-                <input 
-                    type="text" 
-                    className="location-input"
-                    value={newLocation}
-                    onChange={(e) => setNewLocation(e.target.value)}
-                    placeholder="Escribe tu ciudad o dirección"
-                />
+                // 2. Aquí cambiamos el input por el SELECT
+                <select
+                  className="location-input"
+                  value={newLocation}
+                  onChange={(e) => setNewLocation(e.target.value)}
+                >
+                  <option value="">Selecciona tu ciudad</option>
+                  {CIUDADES_MEXICO.map(ciudad => (
+                    <option key={ciudad} value={ciudad}>
+                      {ciudad}
+                    </option>
+                  ))}
+                </select>
               ) : (
-                // Si NO estamos editando, mostramos el TEXTO normal
                 <p>{user?.location || "Sin ubicación definida"}</p>
               )}
             </div>
@@ -131,19 +138,19 @@ export default function UserProfile() {
             </div>
           </div>
 
+          {/* Botones de acción mejorados */}
           <div className="profile-actions">
             {isEditing ? (
                 <>
                     <button className="save-btn" onClick={handleSaveChanges}>
-                        Guardar Cambios
+                        Guardar
                     </button>
                     <button className="cancel-btn" onClick={() => {
-    setIsEditing(false);
-    // Agregamos el '?' después de user para protegerlo
-    setNewLocation(user?.location || ""); 
-}}>
-    Cancelar
-</button>
+                        setIsEditing(false);
+                        setNewLocation(user?.location || ""); 
+                    }}>
+                        Cancelar
+                    </button>
                 </>
             ) : (
                 <button className="edit-profile-btn" onClick={() => setIsEditing(true)}>
