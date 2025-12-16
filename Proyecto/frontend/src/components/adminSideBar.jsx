@@ -1,54 +1,30 @@
 import React from "react";
 import LogoutButton from "./logout";
+import './Styles/Admin.css'; // Asegúrate de importar el CSS
 
 export default function Sidebar({ onSelect }) {
   return (
-    <div style={styles.sidebar}>
-      <h2 style={styles.title}>Admin Panel</h2>
+    <div className="admin-sidebar">
+      <h2 className="sidebar-title">Admin Panel</h2>
 
-      <button style={styles.btn} onClick={() => onSelect("users")}>
-        Ver Usuarios
+      <button className="sidebar-btn" onClick={() => onSelect("users")}>
+        👥 Ver Usuarios
       </button>
 
-      <button style={styles.btn} onClick={() => onSelect("services")}>
-        Ver Servicios
+      <button className="sidebar-btn" onClick={() => onSelect("services")}>
+        🛠️ Ver Servicios
       </button>
 
-      <button style={styles.btn} onClick={() => onSelect("addAdmin")}>
-        Crear Admin
+      <button className="sidebar-btn" onClick={() => onSelect("addAdmin")}>
+        ➕ Crear Admin
       </button>
 
-      <LogoutButton/>
+      {/* El botón de logout usualmente trae su propio estilo, 
+          pero lo envolvemos por si acaso */}
+      <div style={{ marginTop: 'auto' }}>
+        <LogoutButton/>
+      </div>
       
     </div>
   );
 }
-
-const styles = {
-  sidebar: {
-    width: "250px",
-    height: "100vh",
-    padding: "20px",
-    backgroundColor: "#ece5dd",
-    display: "flex",
-    flexDirection: "column",
-    gap: "20px",
-  },
-  title: {
-    fontSize: "24px",
-    marginBottom: "20px"
-  },
-  btn: {
-    backgroundColor: "#b9a89c",
-    border: "none",
-    padding: "15px",
-    borderRadius: "20px",
-    fontSize: "16px",
-    cursor: "pointer"
-  },
-  logout: {
-    marginTop: "20px",
-    color: "#0077cc",
-    textDecoration: "none"
-  }
-};

@@ -40,7 +40,7 @@ export default function AdminViewServices() {
   if (loading) return <p>Cargando servicios...</p>;
 
   return (
-  <div className="admin-card">
+  <div className="admin-card table-card">
   <h2 className="admin-title">Servicios</h2>
 
   <table className="admin-table">

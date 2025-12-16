@@ -3,18 +3,24 @@ import { useNavigate } from "react-router-dom";
 import './Styles/UserProfile.css';
 import Header from "./Header"; 
 
+// 1. Agregamos la lista de ciudades igual que en el Registro
+const CIUDADES_MEXICO = [
+  "Aguascalientes", "Cancún", "Celaya", "Chihuahua", "Ciudad de México",
+  "Ciudad Juárez", "Cuernavaca", "Guadalajara", "Hermosillo", "León",
+  "Mérida", "Monterrey", "Morelia", "Pachuca", "Puebla", "Querétaro",
+  "Saltillo", "San Luis Potosí", "Tijuana", "Toluca", "Torreón",
+  "Tuxtla Gutiérrez", "Veracruz", "Villahermosa", "Xalapa", "Zacatecas"
+];
+
 export default function UserProfile() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   
-  // Estado para saber si estamos editando
   const [isEditing, setIsEditing] = useState(false);
-  // Estado para guardar la nueva ubicación mientras escribes
   const [newLocation, setNewLocation] = useState("");
 
   const navigate = useNavigate();
 
-  // 1. Cargar datos del usuario
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -32,7 +38,7 @@ export default function UserProfile() {
         
         if (data.success) {
           setUser(data.user);
-          setNewLocation(data.user.location || ""); // Pre-llenamos el dato
+          setNewLocation(data.user.location || ""); 
         } else {
           alert("No se pudo cargar el perfil");
         }
@@ -46,7 +52,6 @@ export default function UserProfile() {
     fetchProfile();
   }, [navigate]);
 
-  // 2. Función para guardar los cambios
   const handleSaveChanges = async () => {
     try {
         const token = localStorage.getItem("token");
@@ -62,9 +67,8 @@ export default function UserProfile() {
         const data = await res.json();
 
         if (data.success) {
-            // Actualizamos el usuario en pantalla sin recargar
             setUser({ ...user, location: newLocation });
-            setIsEditing(false); // Salimos del modo edición
+            setIsEditing(false); 
             alert("Ubicación actualizada correctamente");
         } else {
             alert("Error al actualizar: " + data.message);
