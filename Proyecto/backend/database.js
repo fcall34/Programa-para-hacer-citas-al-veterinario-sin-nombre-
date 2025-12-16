@@ -2,8 +2,8 @@
 import sql from 'mssql'
 
 const dbConfig = { 
-    user: "fer_admin", 
-    password: "12345", 
+    user: "miUsuario", 
+    password: "miPassword", 
     database: "apointdate", 
     server: "localhost", 
     options: { encrypt : true, 

@@ -21,7 +21,7 @@ export default function Sidebar({ onSelect }) {
 
       {/* El botón de logout usualmente trae su propio estilo, 
           pero lo envolvemos por si acaso */}
-      <div style={{ marginTop: 'auto' }}>
+      <div>
         <LogoutButton/>
       </div>
       

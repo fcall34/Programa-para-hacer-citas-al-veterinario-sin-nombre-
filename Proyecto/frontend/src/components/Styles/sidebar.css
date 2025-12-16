@@ -2,61 +2,67 @@
 
 .sidebar-container {
   width: 280px;
-  height: 100vh; /* Altura completa */
-  background-color: white; /* Blanco limpio */
+  height: 100vh;
+  background-color: white;
   padding: 30px 20px;
   display: flex;
   flex-direction: column;
   gap: 15px;
-  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.05); /* Sombra suave a la derecha */
-  position: sticky; /* Para que se quede fijo si haces scroll */
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.05);
+  position: sticky;
   top: 0;
+
+  /* 🔑 CLAVE: evitamos herencias raras */
+  color: #333;
 }
 
+/* Título */
 .sidebar-title {
   font-size: 24px;
   font-weight: 700;
   color: #333;
   margin-bottom: 30px;
   text-align: center;
-  letter-spacing: 1px;
 }
 
-/* Estilo base de los botones del menú */
+/* Botones */
 .sidebar-btn {
+  width: 100%;
   background-color: transparent;
   border: none;
   padding: 15px 20px;
   border-radius: 12px;
+
+  color: #333 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+
   font-size: 16px;
   font-weight: 500;
-  color: #666;
   cursor: pointer;
   text-align: left;
-  transition: all 0.3s ease;
+
   display: flex;
   align-items: center;
-  gap: 10px;
+
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Efecto al pasar el mouse */
+/* Hover */
 .sidebar-btn:hover {
-  background-color: #f0f7ff; /* Azul muy clarito */
-  color: #0066ff;
+  background-color: #f0f7ff;
+  color: #0066ff !important;
 }
 
-/* CLASE ACTIVA: Cuando el botón está seleccionado */
+/* Activo */
 .sidebar-btn.active {
   background-color: #0066ff;
-  color: white;
+  color: white !important;
   box-shadow: 0 4px 12px rgba(0, 102, 255, 0.3);
 }
 
-/* Empujamos el botón de logout al fondo */
+/* Footer */
 .sidebar-footer {
-  /* ANTES decía: margin-top: auto; (esto lo mandaba al fondo) */
-  
-  margin-top: 40px; /* AHORA: Solo le damos un espacio fijo de 40px */
   padding-top: 20px;
-  border-top: 1px solid #eee; /* Mantenemos la rayita divisora elegante */
+  border-top: 1px solid #eee;
 }

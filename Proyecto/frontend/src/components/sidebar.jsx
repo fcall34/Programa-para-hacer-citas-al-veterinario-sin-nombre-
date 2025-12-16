@@ -1,9 +1,9 @@
 import React from "react";
 import LogoutButton from "./logout";
-import './Styles/sidebar.css';
+import "./Styles/sidebar.css";
 
 export default function Sidebar({ onSelect, selectedOption }) {
-  
+
   const getButtonClass = (optionName) => {
     return `sidebar-btn ${selectedOption === optionName ? "active" : ""}`;
   };
@@ -12,43 +12,43 @@ export default function Sidebar({ onSelect, selectedOption }) {
     <div className="sidebar-container">
       <h2 className="sidebar-title">A Point Date</h2>
 
-      <button 
-        className={getButtonClass("publicar")} 
+      <button
+        className={getButtonClass("publicar")}
         onClick={() => onSelect("publicar")}
       >
         Publicar Servicio
       </button>
 
-      <button 
-        className={getButtonClass("citas")} 
+      <button
+        className={getButtonClass("citas")}
         onClick={() => onSelect("citas")}
       >
         Citas en espera
       </button>
 
-      <button 
-        className={getButtonClass("Complete-citas")} 
+      <button
+        className={getButtonClass("Complete-citas")}
         onClick={() => onSelect("Complete-citas")}
       >
         Completar citas
       </button>
 
-      <button 
-        className={getButtonClass("stats")} 
+      <button
+        className={getButtonClass("stats")}
         onClick={() => onSelect("stats")}
       >
         Estadísticas
       </button>
 
-      <button 
-        className={getButtonClass("resenas")} 
+      <button
+        className={getButtonClass("resenas")}
         onClick={() => onSelect("resenas")}
       >
         Reseñas
       </button>
 
-      <button 
-        className={getButtonClass("Perfil")} 
+      <button
+        className={getButtonClass("Perfil")}
         onClick={() => onSelect("Perfil")}
       >
         Mi perfil
