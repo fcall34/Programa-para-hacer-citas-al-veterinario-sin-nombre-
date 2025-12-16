@@ -79,81 +79,86 @@ export default function UserProfile() {
   if (loading) return <div className="loading-screen">Cargando perfil...</div>;
 
   return (
-    <div className="profile-page-wrapper">
-      {/* Header conectado a la navegación correcta */}
+  <div className="profile-page-wrapper">
+
+    {/* 🔴 Header SOLO para clientes */}
+    {user?.user_type === 1 && (
       <Header 
         onViewAppointments={() => navigate('/ClientHome')} 
         onHome={() => navigate('/ClientHome')}
-      /> 
+      />
+    )}
 
-      <div className="profile-container">
-        <div className="profile-card">
-          <div className="profile-avatar">
-            {user?.full_name?.charAt(0).toUpperCase()}
-          </div>
-          
-          <h2 className="profile-name">{user?.full_name}</h2>
-          <p className="profile-type">
-            {user?.user_type === 1 ? "Cliente" : "Proveedor"}
-          </p>
+    <div className="profile-container">
+      <div className="profile-card">
+        <div className="profile-avatar">
+          {user?.full_name?.charAt(0).toUpperCase()}
+        </div>
 
-          <div className="profile-info-grid">
-            <div className="info-item">
-              <label>Correo Electrónico</label>
-              <p>{user?.email}</p> {/* Solo lectura */}
-            </div>
-            
-            <div className="info-item">
-              <label>Teléfono</label>
-              <p>{user?.phone || "--"}</p> {/* Solo lectura */}
-            </div>
-            
-            <div className="info-item">
-              <label>Ubicación</label>
-              {isEditing ? (
-                // Si estamos editando, mostramos el INPUT
-                <input 
-                    type="text" 
-                    className="location-input"
-                    value={newLocation}
-                    onChange={(e) => setNewLocation(e.target.value)}
-                    placeholder="Escribe tu ciudad o dirección"
-                />
-              ) : (
-                // Si NO estamos editando, mostramos el TEXTO normal
-                <p>{user?.location || "Sin ubicación definida"}</p>
-              )}
-            </div>
-            
-            <div className="info-item">
-              <label>Miembro desde</label>
-              <p>2025</p>
-            </div>
+        <h2 className="profile-name">{user?.full_name}</h2>
+        <p className="profile-type">
+          {user?.user_type === 1 ? "Cliente" : "Proveedor"}
+        </p>
+
+        <div className="profile-info-grid">
+          <div className="info-item">
+            <label>Correo Electrónico</label>
+            <p>{user?.email}</p>
           </div>
 
-          <div className="profile-actions">
+          <div className="info-item">
+            <label>Teléfono</label>
+            <p>{user?.phone || "--"}</p>
+          </div>
+
+          <div className="info-item">
+            <label>Ubicación</label>
             {isEditing ? (
-                <>
-                    <button className="save-btn" onClick={handleSaveChanges}>
-                        Guardar Cambios
-                    </button>
-                    <button className="cancel-btn" onClick={() => {
-    setIsEditing(false);
-    // Agregamos el '?' después de user para protegerlo
-    setNewLocation(user?.location || ""); 
-}}>
-    Cancelar
-</button>
-                </>
+              <input 
+                type="text" 
+                className="location-input"
+                value={newLocation}
+                onChange={(e) => setNewLocation(e.target.value)}
+              />
             ) : (
-                <button className="edit-profile-btn" onClick={() => setIsEditing(true)}>
-                    ✏️ Editar Ubicación
-                </button>
+              <p>{user?.location || "Sin ubicación definida"}</p>
             )}
           </div>
-          
+
+          <div className="info-item">
+            <label>Miembro desde</label>
+            <p>2025</p>
+          </div>
+        </div>
+
+        <div className="profile-actions">
+          {isEditing ? (
+            <>
+              <button className="save-btn" onClick={handleSaveChanges}>
+                Guardar Cambios
+              </button>
+              <button
+                className="cancel-btn"
+                onClick={() => {
+                  setIsEditing(false);
+                  setNewLocation(user?.location || "");
+                }}
+              >
+                Cancelar
+              </button>
+            </>
+          ) : (
+            <button
+              className="edit-profile-btn"
+              onClick={() => setIsEditing(true)}
+            >
+              ✏️ Editar Ubicación
+            </button>
+          )}
         </div>
       </div>
     </div>
-  );
+  </div>
+);
+
 }

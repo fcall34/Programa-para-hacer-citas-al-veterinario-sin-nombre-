@@ -1,37 +1,41 @@
 import React from "react";
-import './Styles/ServiceDetailCrd.css'
-
+import "./Styles/ServiceDetailCrd.css";
 
 function formatTime(timeValue) {
   if (!timeValue) return "";
-
-  // Si viene como string ISO: "1970-01-01T09:17:00.000Z"
   const match = timeValue.match(/T(\d{2}):(\d{2})/);
-
   if (!match) return "";
-
   return `${match[1]}:${match[2]}`;
 }
 
-
-
-
 export default function ServiceDetailCard({ service, onOpenSchedule }) {
   if (!service) {
-    return <p className="no-service">Selecciona un servicio para ver los detalles</p>;
+    return (
+      <p className="no-service">
+        Selecciona un servicio para ver los detalles
+      </p>
+    );
   }
+
+  // ⭐ normalizamos el promedio
+  const avgRating = Number(service.avg_rating);
+  const ratingText = !isNaN(avgRating)
+    ? avgRating.toFixed(1)
+    : "0.0";
+
+  const reviewCount = service.review_count ?? 0;
 
   return (
     <div className="detail-card">
 
       {/* HEADER */}
       <div className="detail-header">
-        <div>
-          <h2 className="detail-title">{service.title}</h2>
-        </div>
+        <h2 className="detail-title">{service.title}</h2>
 
         <div className="detail-actions">
-          <button className="apply-btn" onClick={onOpenSchedule}>Agendar cita</button>
+          <button className="apply-btn" onClick={onOpenSchedule}>
+            Agendar cita
+          </button>
           <button className="icon-btn">❤️</button>
           <button className="icon-btn">🔗</button>
         </div>
@@ -53,7 +57,10 @@ export default function ServiceDetailCard({ service, onOpenSchedule }) {
           <span className="info-icon">⏰</span>
           <div>
             <p className="info-label">Horario</p>
-            <p>{formatTime(service.start_time)} - {formatTime(service.end_time)}</p>
+            <p>
+              {formatTime(service.start_time)} -{" "}
+              {formatTime(service.end_time)}
+            </p>
           </div>
         </div>
 
@@ -61,15 +68,21 @@ export default function ServiceDetailCard({ service, onOpenSchedule }) {
           <span className="info-icon">📦</span>
           <div>
             <p className="info-label">Categoría</p>
-            <div className="badge blue">{service.category_description ?? "Sin categoría"}</div>
+            <div className="badge blue">
+              {service.category_description ?? "Sin categoría"}
+            </div>
           </div>
         </div>
 
+        {/* ⭐ PROMEDIO DE ESTRELLAS */}
         <div className="info-row">
           <span className="info-icon">⭐</span>
           <div>
-            <p className="info-label">Reseñas</p>
-            <p>{service.review_count ?? 0} reseñas</p>
+            <p className="info-label">Calificación</p>
+            <p>
+              <strong>{ratingText}</strong> / 5
+              {" "}({reviewCount} reseñas)
+            </p>
           </div>
         </div>
       </div>

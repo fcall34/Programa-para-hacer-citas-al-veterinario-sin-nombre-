@@ -47,6 +47,13 @@ export default function Sidebar({ onSelect, selectedOption }) {
         Reseñas
       </button>
 
+      <button 
+        className={getButtonClass("Perfil")} 
+        onClick={() => onSelect("Perfil")}
+      >
+        Mi perfil
+      </button>
+
       <div className="sidebar-footer">
         <LogoutButton />
       </div>

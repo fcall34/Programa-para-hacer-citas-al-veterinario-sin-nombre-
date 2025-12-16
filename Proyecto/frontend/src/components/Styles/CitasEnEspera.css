@@ -1,0 +1,101 @@
+/* ---- TARJETA ---- */
+.citas-card {
+  max-width: 1100px;
+}
+
+/* ---- TABLA ---- */
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.citas-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.citas-table th {
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+  padding: 14px;
+  background-color: #f9fafc;
+  border-bottom: 2px solid #eee;
+}
+
+.citas-table td {
+  padding: 14px;
+  font-size: 15px;
+  border-bottom: 1px solid #eee;
+  color: #333;
+}
+
+.citas-table tr:hover {
+  background-color: #fafafa;
+}
+
+/* ---- ESTADO ---- */
+.status {
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  display: inline-block;
+}
+
+.status.accepted {
+  background-color: #e6f7ed;
+  color: #1a7f37;
+}
+
+.status.rejected {
+  background-color: #fdecea;
+  color: #b42318;
+}
+
+/* ---- BOTONES ---- */
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn.accept {
+  background-color: #0066ff;
+  color: white;
+}
+
+.btn.accept:hover {
+  background-color: #0052cc;
+}
+
+.btn.reject {
+  background-color: #f3f4f6;
+  color: #444;
+}
+
+.btn.reject:hover {
+  background-color: #e5e7eb;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ---- EMPTY ---- */
+.empty-row {
+  text-align: center;
+  padding: 30px;
+  color: #777;
+}

@@ -148,19 +148,31 @@ export const getAppointments = async (req, res) => {
     const query = `
       SELECT 
         a.Appointment_id AS appointment_id,
-        CONVERT(varchar(19), a.Appointment_date, 120) AS appointment_date, -- "YYYY-MM-DD HH:MM:SS"
+        CONVERT(varchar(19), a.Appointment_date, 120) AS appointment_date,
         a.Appointment_status AS appointment_status,
         a.Appointment_time AS appointment_time,
+        a.is_complete,
         s.title AS title,
         s.location AS location,
-        FORMAT(s.start_time, 'HH:mm') AS service_start_time,
-        FORMAT(s.end_time, 'HH:mm') AS service_end_time,
-        c.category_description AS category
+        c.category_description AS category_description,
+
+        -- ¿el cliente ya calificó?
+        CASE 
+          WHEN EXISTS (
+            SELECT 1 FROM Reviews r
+            WHERE r.appointment_id = a.Appointment_id
+              AND r.reviewer_id = @client_id
+              AND r.review_target = 'provider'
+          )
+          THEN 1 ELSE 0
+        END AS clientReviewed
+
       FROM dbo.Appointments a
       JOIN dbo.Services s ON a.service_id = s.service_id
       LEFT JOIN dbo.Category c ON s.category_id = c.category_id
       WHERE a.client_id = @client_id
       ORDER BY a.Appointment_date DESC
+
     `;
 
     const result = await pool.request()
@@ -180,7 +192,6 @@ export const getAppointments = async (req, res) => {
 export const getAcceptedAppointmentsByProvider = async (req, res) => {
   try {
     const providerId = req.user.id;
-
     const pool = await poolPromise;
 
     const result = await pool.request()
@@ -191,18 +202,33 @@ export const getAcceptedAppointmentsByProvider = async (req, res) => {
           a.Appointment_date,
           a.Appointment_status,
           a.is_complete,
+
           s.title AS service_name,
+
           u.full_name AS client_name,
           u.phone AS client_phone,
-          u.email AS client_email
+          u.email AS client_email,
+
+          CASE 
+            WHEN r.review_id IS NULL THEN 0
+            ELSE 1
+          END AS clientReviewed
+
         FROM Appointments a
         JOIN Services s ON a.service_id = s.service_id
         JOIN Users u ON a.client_id = u.user_id
+
+        LEFT JOIN Reviews r 
+          ON r.appointment_id = a.Appointment_id
+          AND r.reviewer_id = a.provider_id
+          AND r.reviewee_id = a.client_id
+          AND r.review_target = 'client'
+
         WHERE 
           a.provider_id = @provider_id
           AND a.Appointment_status = 1
-        ORDER BY a.Appointment_date ASC
 
+        ORDER BY a.Appointment_date ASC
       `);
 
     res.json({
@@ -218,6 +244,7 @@ export const getAcceptedAppointmentsByProvider = async (req, res) => {
     });
   }
 };
+
 
 export const completeAppointment = async (req, res) => {
   const { folio } = req.body;
@@ -253,18 +280,36 @@ export const completeAppointment = async (req, res) => {
       });
     }
 
-    // 2️⃣ Marcar como completada
-    await pool.request()
+        const updateRes = await pool.request()
       .input("appointment_id", sql.Int, folio)
       .query(`
         UPDATE Appointments
         SET is_complete = 1
         WHERE appointment_id = @appointment_id
+          AND is_complete = 0
       `);
+
+    if (updateRes.rowsAffected[0] === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "La cita ya estaba completada"
+      });
+    }
+
+    const updatedAppointment = await pool.request()
+  .input("appointment_id", sql.Int, folio)
+  .query(`
+    SELECT *
+    FROM Appointments
+    WHERE appointment_id = @appointment_id
+  `);
+
+
 
     return res.json({
       success: true,
-      message: "Cita completada correctamente"
+      message: "Cita completada correctamente",
+      appointment: updatedAppointment.recordset[0]
     });
 
   } catch (error) {

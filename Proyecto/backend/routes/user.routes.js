@@ -15,7 +15,7 @@ from "../Controllers/Appointment.Controllers.js";
 /* ================================
    CONTROLADORES PROVEEDOR
    ================================ */
-import { publishService, ViewAllAppointments, UpdateAppointmentStatus } 
+import { publishService, ViewAllAppointments, UpdateAppointmentStatus, getProviderStats } 
 from "../Controllers/Provider.Controllers.js";
 
 /* ================================
@@ -48,7 +48,13 @@ import { requireRole } from "../Middleware/Roles.Middleware.js";
 import { ROLES } from "../Constants/Roles.js";
 import { verifyToken } from "../Middleware/Token.Middleware.js";
 
+import {createReview, getProviderReviews} from "../Controllers/Review.Controllers.js"
+
 const router = express.Router();
+
+router.get("/provider/misreviews",verifyToken, requireRole(ROLES.PROVIDER), getProviderReviews);
+router.get("/provider/stats",verifyToken,requireRole(ROLES.PROVIDER),getProviderStats);
+
 
 /* ================================
    AUTH
@@ -146,4 +152,6 @@ router.delete("/admin/delete-user/:id", verifyToken, adminDeleteUser);
 router.delete("/admin/delete-service/:id", verifyToken, adminDeleteService);
 router.post("/admin/create-user", verifyToken, adminCreateUser);
 
+
+router.post("/reviews", verifyToken, createReview);
 export default router;

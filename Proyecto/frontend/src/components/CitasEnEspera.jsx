@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import './Styles/CitasEnEspera.css';
 
 export default function CitasEnEspera() {
   const [citas, setCitas] = useState([]);
@@ -128,95 +129,77 @@ export default function CitasEnEspera() {
   if (loading) return <p>Cargando citas...</p>;
 
   return (
-    <div style={styles.container}>
-      <h1 style={styles.title}>Citas en espera</h1>
+  <div className="publish-wrapper">
+    <div className="publish-card citas-card">
+      <h2>Citas en espera</h2>
 
-      <table style={styles.table}>
-        <thead>
-          <tr>
-            <th>Cliente</th>
-            <th>Email</th>
-            <th>Fecha</th>
-            <th>Hora</th>
-            <th>Servicio</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {citas.length === 0 ? (
+      <div className="table-wrapper">
+        <table className="citas-table">
+          <thead>
             <tr>
-              <td colSpan="6">No tienes citas.</td>
+              <th>Cliente</th>
+              <th>Email</th>
+              <th>Fecha</th>
+              <th>Hora</th>
+              <th>Servicio</th>
+              <th>Acciones</th>
             </tr>
-          ) : (
-            citas.map(cita => (
-              <tr key={cita.Appointment_id ?? `noid-${Math.random()}`}>
-                <td>{cita.client_name}</td>
-                <td>{cita.client_email}</td>
-                <td>{formatearFecha(cita.appointment_date)}</td>
-                <td>{formatearHora(cita.appointment_time)}</td>
-                <td>{cita.title}</td>
+          </thead>
 
-                <td>
-                  {cita.Appointment_status === 1 ? (
-                    <span style={{ color: "green", fontWeight: "bold" }}>
-                      Aceptada
-                    </span>
-                  ) : cita.Appointment_status === 2 ? (
-                    <span style={{ color: "red", fontWeight: "bold" }}>
-                      Rechazada
-                    </span>
-                  ) : (
-                    <>
-                      <button
-                        onClick={() => cambiarEstado(cita.Appointment_id, 1)}
-                        style={styles.accept}
-                        disabled={processingId === Number(cita.Appointment_id)}
-                      >
-                        {processingId === Number(cita.Appointment_id) ? "..." : "Aceptar"}
-                      </button>
-
-                      <button
-                        onClick={() => cambiarEstado(cita.Appointment_id, 2)}
-                        style={styles.reject}
-                        disabled={processingId === Number(cita.Appointment_id)}
-                      >
-                        {processingId === Number(cita.Appointment_id) ? "..." : "Rechazar"}
-                      </button>
-                    </>
-                  )}
+          <tbody>
+            {citas.length === 0 ? (
+              <tr>
+                <td colSpan="6" className="empty-row">
+                  No tienes citas.
                 </td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            ) : (
+              citas.map(cita => (
+                <tr key={cita.Appointment_id}>
+                  <td>{cita.client_name}</td>
+                  <td>{cita.client_email}</td>
+                  <td>{formatearFecha(cita.appointment_date)}</td>
+                  <td>{formatearHora(cita.appointment_time)}</td>
+                  <td>{cita.title}</td>
+
+                  <td>
+                    {cita.Appointment_status === 1 ? (
+                      <span className="status accepted">Aceptada</span>
+                    ) : cita.Appointment_status === 2 ? (
+                      <span className="status rejected">Rechazada</span>
+                    ) : (
+                      <div className="actions">
+                        <button
+                          className="btn accept"
+                          onClick={() => cambiarEstado(cita.Appointment_id, 1)}
+                          disabled={processingId === Number(cita.Appointment_id)}
+                        >
+                          {processingId === Number(cita.Appointment_id)
+                            ? "..."
+                            : "Aceptar"}
+                        </button>
+
+                        <button
+                          className="btn reject"
+                          onClick={() => cambiarEstado(cita.Appointment_id, 2)}
+                          disabled={processingId === Number(cita.Appointment_id)}
+                        >
+                          {processingId === Number(cita.Appointment_id)
+                            ? "..."
+                            : "Rechazar"}
+                        </button>
+                      </div>
+                    )}
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
-  );
+  </div>
+);
+
 }
 
-const styles = {
-  container: { padding: "40px" },
-  title: { fontSize: "40px", marginBottom: "20px" },
-  table: {
-    width: "100%",
-    borderCollapse: "collapse",
-    backgroundColor: "#f0ece4",
-    padding: "10px"
-  },
-  accept: {
-    backgroundColor: "green",
-    color: "white",
-    padding: "6px 12px",
-    marginRight: "8px",
-    border: "none",
-    cursor: "pointer"
-  },
-  reject: {
-    backgroundColor: "red",
-    color: "white",
-    padding: "6px 12px",
-    border: "none",
-    cursor: "pointer"
-  }
-};

@@ -1,0 +1,32 @@
+.stars {
+  display: flex;
+  gap: 2px;
+}
+
+.star {
+  font-size: 18px;
+  color: #ccc;
+}
+
+.star.full {
+  color: #f5c518;
+}
+
+.star.empty {
+  color: #ddd;
+}
+
+/* ⭐ media estrella */
+.star.half {
+  position: relative;
+  color: #ddd;
+}
+
+.star.half::before {
+  content: "★";
+  position: absolute;
+  left: 0;
+  width: 50%;
+  overflow: hidden;
+  color: #f5c518;
+}

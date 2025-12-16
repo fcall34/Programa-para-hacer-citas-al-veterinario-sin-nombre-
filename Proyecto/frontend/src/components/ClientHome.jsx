@@ -97,11 +97,10 @@ export default function HomeClient() {
 
     {view === "appointments" && (
       <div className="appointments-container">
-        <AppointmentsList />
-
         <button className="back-btn" onClick={() => setView("services")}>
           ← Volver a Servicios
         </button>
+        <AppointmentsList />
       </div>
     )}
 

@@ -226,10 +226,6 @@ export const verifyEmail = async (req, res) => {
    ============================================== */
 export const profile = async (req, res) => {
   try {
-
-    console.log("🟢 USER DEL TOKEN:", req.user);
-    console.log("🟢 ID USUARIO:", req.user?.id);
-
     const userId = req.user.id;
     
     const pool = await poolPromise;

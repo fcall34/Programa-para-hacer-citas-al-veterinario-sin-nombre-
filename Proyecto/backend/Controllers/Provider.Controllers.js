@@ -132,3 +132,52 @@ export const UpdateAppointmentStatus = async (req, res) => {
 
 
 
+export const getProviderStats = async (req, res) => {
+  try {
+    const providerId = req.user.id;
+    const pool = await poolPromise;
+
+    const result = await pool.request()
+      .input("provider_id", sql.Int, providerId)
+      .query(`
+        SELECT
+          u.full_name,
+
+          -- citas completadas
+          COUNT(DISTINCT a.Appointment_id) AS completedAppointments,
+
+          -- ganancias
+          ISNULL(SUM(s.cost), 0) AS totalEarnings,
+
+          -- rating promedio del proveedor
+          ROUND(AVG(CAST(r.rating AS FLOAT)), 1) AS avgRating
+
+        FROM Users u
+        LEFT JOIN Appointments a
+          ON a.provider_id = u.user_id
+          AND a.is_complete = 1
+
+        LEFT JOIN Services s 
+          ON a.service_id = s.service_id
+
+        LEFT JOIN Reviews r
+          ON r.appointment_id = a.appointment_id
+          AND r.review_target = 'provider'
+
+        WHERE u.user_id = @provider_id
+        GROUP BY u.full_name
+      `);
+
+    res.json({
+      success: true,
+      stats: result.recordset[0]
+    });
+
+  } catch (error) {
+    console.error("Error obteniendo stats del proveedor:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error del servidor"
+    });
+  }
+};

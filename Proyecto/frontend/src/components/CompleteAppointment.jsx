@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import ReviewForm from "./ReviewForm";
 
 export default function CompleteAppointment() {
   const [appointments, setAppointments] = useState([]);
@@ -93,12 +94,38 @@ export default function CompleteAppointment() {
             {new Date(app.Appointment_date).toLocaleString()}
           </p>
 
-          {/* 🟢 ESTADO */}
           {app.is_complete ? (
-            <span style={{ color: "green", fontWeight: "bold" }}>
-              ✔ Completada
-            </span>
-          ) : (
+  <>
+    <span style={{ color: "green", fontWeight: "bold" }}>
+      ✔ Completada
+    </span>
+
+          {/* ⭐ CALIFICAR CLIENTE */}
+          {!app.clientReviewed && (
+            <ReviewForm
+              appointmentId={app.Appointment_id}
+              target="client"
+              allowComment={false}
+              onSuccess={() => {
+                setAppointments(prev =>
+                  prev.map(a =>
+                    a.Appointment_id === app.Appointment_id
+                      ? { ...a, clientReviewed: true }
+                      : a
+                  )
+                );
+              }}
+            />
+          )}
+
+          {app.clientReviewed && (
+            <p style={{ color: "gray" }}>
+              ⭐ Cliente ya calificado
+            </p>
+          )}
+        </>
+      ) : (
+
             <>
               <input
                 type="number"
