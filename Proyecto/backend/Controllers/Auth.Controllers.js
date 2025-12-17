@@ -45,7 +45,7 @@ export const register = async (req, res)=>{
       `);
 
       const resend = getResendClient();
-      const verifyUrl = `${process.env.FRONTEND_URL}/verify-email/${token}`;
+      const verifyUrl = `programa-para-hacer-citas-al-veterinario-sin-nom-production.up.railway.app/verify-email/${token}`;
 
       const response = await resend.emails.send({
       from: process.env.EMAIL_FROM,
@@ -168,7 +168,7 @@ export const verifyEmail = async (req, res) => {
   try {
     const pool = await poolPromise;
 
-    // 1️⃣ Buscar token
+
     const tokenRes = await pool.request()
       .input("token", sql.VarChar, token)
       .query(`
@@ -185,7 +185,6 @@ export const verifyEmail = async (req, res) => {
 
     const { user_id } = tokenRes.recordset[0];
 
-    // 2️⃣ Marcar usuario como verificado
     await pool.request()
       .input("user_id", sql.Int, user_id)
       .query(`
@@ -193,8 +192,6 @@ export const verifyEmail = async (req, res) => {
         SET email_verified = 1
         WHERE user_id = @user_id
       `);
-
-    // 3️⃣ Eliminar token
     await pool.request()
       .input("token", sql.VarChar, token)
       .query(`
@@ -214,23 +211,14 @@ export const verifyEmail = async (req, res) => {
       message: "Error del servidor"
     });
   }
-
-
-  
-
-
 };
 
-/* ==============================================
-   FUNCIÓN 1: OBTENER PERFIL (Con todos los datos)
-   ============================================== */
 export const profile = async (req, res) => {
   try {
     const userId = req.user.id;
     
     const pool = await poolPromise;
     
-    // 2. Buscamos TODOS los datos importantes: email, phone, location
     const result = await pool.request()
       .input('id', sql.Int, userId)
       .query('SELECT user_id, full_name, email, phone, location, user_type FROM Users WHERE user_id = @id');
@@ -239,7 +227,6 @@ export const profile = async (req, res) => {
       return res.status(404).json({ success: false, message: "Usuario no encontrado" });
     }
 
-    // 3. Enviamos el usuario completo al Frontend
     res.json({
       success: true,
       user: result.recordset[0]
@@ -252,9 +239,6 @@ export const profile = async (req, res) => {
 };
 
 
-/* ==============================================
-   FUNCIÓN 2: ACTUALIZAR UBICACIÓN
-   ============================================== */
 export const updateLocation = async (req, res) => {
   const { location } = req.body;
   
