@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Styles/AppointmentList.css";
 import ReviewForm from "./ReviewForm";
-import "./styles/ReviewForm.css";
+import "./Styles/ReviewForm.css";
 const API_URL = import.meta.env.VITE_API_URL;
 
 export default function AppointmentsList() {
