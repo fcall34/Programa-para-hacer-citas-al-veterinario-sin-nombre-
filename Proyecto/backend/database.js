@@ -6,11 +6,15 @@ const dbConfig = {
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   server: process.env.DB_SERVER,
+  port: 1433,
   options: {
-    encrypt: process.env.DB_ENCRYPT === 'true',
-    trustServerCertificate: process.env.DB_TRUST_CERT === 'true',
+    encrypt: true,
+    trustServerCertificate: false
   },
+  connectionTimeout: 30000,
+  requestTimeout: 30000
 };
+
 
 
 const poolPromise = new sql.ConnectionPool(dbConfig).connect()
