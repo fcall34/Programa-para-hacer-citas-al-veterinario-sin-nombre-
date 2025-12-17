@@ -45,11 +45,11 @@ export const register = async (req, res)=>{
       `);
 
       const resend = getResendClient();
-      const verifyUrl = `http://localhost:3000/verify-email/${token}`;
+      const verifyUrl = `${process.env.FRONTEND_URL}/verify-email/${token}`;
 
       const response = await resend.emails.send({
       from: process.env.EMAIL_FROM,
-      to: "itztlidlr@gmail.com",
+      to: "calleja.jimenez.fernando.yahir@gmail.com",
       subject: "Verifica tu correo",
       html: `
         <h2>Bienvenido</h2>
