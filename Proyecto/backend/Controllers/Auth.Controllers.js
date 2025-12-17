@@ -45,7 +45,7 @@ export const register = async (req, res)=>{
       `);
 
       const resend = getResendClient();
-      const verifyUrl = `programa-para-hacer-citas-al-veterinario-sin-nom-production.up.railway.app/verify-email/${token}`;
+      const verifyUrl = `${process.env.BACKEND_URL}/api/verify-email/${token}`;
 
       const response = await resend.emails.send({
       from: process.env.EMAIL_FROM,
