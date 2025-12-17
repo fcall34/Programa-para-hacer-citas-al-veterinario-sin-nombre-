@@ -46,7 +46,7 @@ export default function CompleteAppointment() {
 
     try {
       const res = await fetch(
-        "http://localhost:3000/api/provider/complete",
+        `${API_URL}/api/provider/complete`,
         {
           method: "PUT",
           headers: {
