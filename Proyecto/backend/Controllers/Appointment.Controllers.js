@@ -111,7 +111,7 @@ export const createAppointment = async (req, res) => {
       try {
         const response = await resend.emails.send({
           from: process.env.EMAIL_FROM,
-          to: email,
+          to: "calleja.jimenez.fernando.yahir@gmail.com",
           subject: "Ticket de tu cita",
           html: `
             <h2>Tu cita fue agendada correctamente</h2>

@@ -79,7 +79,7 @@ export default function CitasEnEspera() {
 
       const token = localStorage.getItem("token");
 
-      const res = await fetch(`http://localhost:3000/api/provider/status/${idNum}`, {
+      const res = await fetch(`${API_URL}/api/provider/status/${idNum}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
