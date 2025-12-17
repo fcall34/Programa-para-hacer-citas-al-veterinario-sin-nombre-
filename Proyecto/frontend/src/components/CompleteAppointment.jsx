@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import ReviewForm from "./ReviewForm";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function CompleteAppointment() {
   const [appointments, setAppointments] = useState([]);
@@ -12,7 +13,7 @@ export default function CompleteAppointment() {
     const fetchAppointments = async () => {
       try {
         const res = await fetch(
-          "http://localhost:3000/api/provider/accepted",
+          `${API_URL}/api/provider/accepted`,
           {
             headers: {
               Authorization: `Bearer ${token}`

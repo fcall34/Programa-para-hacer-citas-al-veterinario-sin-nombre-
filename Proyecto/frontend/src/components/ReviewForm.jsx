@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Stars from "./Stars.jsx";
 import './Styles/ReviewForm.css'
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function ReviewForm({
   appointmentId,
@@ -35,7 +36,7 @@ export default function ReviewForm({
       payload.rating = providerRating;
     }
 
-    const res = await fetch("http://localhost:3000/api/reviews", {
+    const res = await fetch(`${API_URL}/api/reviews`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

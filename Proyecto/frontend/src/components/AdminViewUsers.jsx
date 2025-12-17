@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function AdminViewUsers() {
   const [users, setUsers] = useState([]);
@@ -8,7 +9,7 @@ export default function AdminViewUsers() {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await fetch("http://localhost:3000/api/admin/users", {
+      const res = await fetch(`${API_URL}/api/admin/users`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -25,7 +26,7 @@ export default function AdminViewUsers() {
   const deleteUser = async (id) => {
     const token = localStorage.getItem("token");
 
-    await fetch(`http://localhost:3000/api/admin/delete-user/${id}`, {
+    await fetch(`${API_URL}/api/admin/delete-user/${id}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` },
     });

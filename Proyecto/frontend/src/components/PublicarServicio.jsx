@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import './Styles/PublicarServicio.css';
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function PublicarServicio() {
   const [formData, setFormData] = useState({
@@ -39,7 +40,7 @@ export default function PublicarServicio() {
         return;
       }
 
-      const res = await fetch("http://localhost:3000/api/provider/publish", {
+      const res = await fetch(`${API_URL}/api/provider/publish`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

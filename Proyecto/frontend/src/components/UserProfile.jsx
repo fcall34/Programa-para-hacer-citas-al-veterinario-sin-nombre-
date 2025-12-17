@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import './Styles/UserProfile.css';
 import Header from "./Header"; 
+const API_URL = import.meta.env.VITE_API_URL;
 
 // 1. Agregamos la lista de ciudades igual que en el Registro
 const CIUDADES_MEXICO = [
@@ -30,7 +31,7 @@ export default function UserProfile() {
           return;
         }
 
-        const res = await fetch("http://localhost:3000/api/profile", {
+        const res = await fetch(`${API_URL}/api/profile`, {
           headers: { "Authorization": `Bearer ${token}` }
         });
 
@@ -55,7 +56,7 @@ export default function UserProfile() {
   const handleSaveChanges = async () => {
     try {
         const token = localStorage.getItem("token");
-        const res = await fetch("http://localhost:3000/api/profile/update-location", {
+        const res = await fetch(`${API_URL}/api/profile/update-location`, {
             method: "PUT",
             headers: { 
                 "Content-Type": "application/json",

@@ -6,6 +6,7 @@ import Header from "../components/Header.jsx";
 import ScheduleMenu from "./ScheduleMenu";
 import AppointmentsList from "./AppointmentList.jsx";
 import './Styles/ClientHome.css';
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function HomeClient() {
 
@@ -23,7 +24,7 @@ export default function HomeClient() {
 
 
 
-        const res = await fetch("http://localhost:3000/api/services", {
+        const res = await fetch(`${API_URL}/api/services`, {
           headers: {
             "Authorization": `Bearer ${token}`
           }

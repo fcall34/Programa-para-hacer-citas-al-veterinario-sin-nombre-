@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import ServiceCard from "./ServiceCard";
 import ServiceDetailCard from "./ServiceDetailCard";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function ServicesPage() {
   const [services, setServices] = useState([]);
   const [selected, setSelected] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/services")
+    fetch(`${API_URL}/api/services`)
       .then(res => res.json())
       .then(res => {
         if (res.success) {
@@ -17,7 +18,7 @@ export default function ServicesPage() {
   }, []);
 
   const handleSelect = (id) => {
-    fetch(`http://localhost:3000/api/services/${id}`)
+    fetch(`${API_URL}/api/services/${id}`)
       .then(res => res.json())
       .then(res => {
         if (res.success) {

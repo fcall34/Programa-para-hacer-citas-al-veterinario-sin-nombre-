@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import './Styles/ScheduleMenu.css'
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function ScheduleMenu({ service, onClose }) {
 
@@ -48,7 +49,7 @@ export default function ScheduleMenu({ service, onClose }) {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await fetch("http://localhost:3000/api/appointments", {
+      const res = await fetch(`${API_URL}/api/appointments`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./Styles/Stats.css";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function ProviderStats() {
 
@@ -11,7 +12,7 @@ export default function ProviderStats() {
       try {
         // Stats
         const statsRes = await fetch(
-          "http://localhost:3000/api/provider/stats",
+          `${API_URL}/api/provider/stats`,
           {
             headers: { Authorization: `Bearer ${token}` }
           }

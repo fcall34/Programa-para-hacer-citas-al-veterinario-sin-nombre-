@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function AdminAddAdmin() {
   const [full_name, setFullName] = useState("");
@@ -12,7 +13,7 @@ export default function AdminAddAdmin() {
     const token = localStorage.getItem("token");
 
     try {
-      const res = await fetch("http://localhost:3000/api/admin/create-user", {
+      const res = await fetch(`${API_URL}/api/admin/create-user`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

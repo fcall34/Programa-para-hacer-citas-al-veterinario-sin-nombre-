@@ -2,6 +2,7 @@ import React from "react";
 import "./Styles/ServiceCard.css";
 import StarsDisplay from "./StarsDisplay";
 
+
 function formatTime(timeValue) {
   if (!timeValue) return "";
   const match = timeValue.match(/T(\d{2}):(\d{2})/);

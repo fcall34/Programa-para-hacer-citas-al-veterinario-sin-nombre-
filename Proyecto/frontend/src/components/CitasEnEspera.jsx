@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import './Styles/CitasEnEspera.css';
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function CitasEnEspera() {
   const [citas, setCitas] = useState([]);
@@ -15,7 +16,7 @@ export default function CitasEnEspera() {
       setLoading(true);
       const token = localStorage.getItem("token");
 
-      const res = await fetch("http://localhost:3000/api/provider/miscitas", {
+      const res = await fetch(`${API_URL}/api/provider/miscitas`, {
         headers: { "Authorization": `Bearer ${token}` }
       });
 

@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import './Styles/logout.css'
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function LogoutButton() {
   const navigate = useNavigate();
@@ -9,7 +10,7 @@ export default function LogoutButton() {
     const token = localStorage.getItem("token");
 
     try {
-      await fetch("http://localhost:3000/api/logout", {
+      await fetch(`${API_URL}/api/logout`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,

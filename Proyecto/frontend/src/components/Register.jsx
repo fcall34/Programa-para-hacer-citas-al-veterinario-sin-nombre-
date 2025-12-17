@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Styles/Register.css';
+const API_URL = import.meta.env.VITE_API_URL;
 
 const CIUDADES_MEXICO = [
   "Aguascalientes",
@@ -52,7 +53,7 @@ export default function Register() {
 
     try {
       // Asegúrate de que la URL coincida con el puerto de tu backend (ej. 3000)
-      const res = await fetch('http://localhost:3000/api/register', {
+      const res = await fetch(`${API_URL}/api/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

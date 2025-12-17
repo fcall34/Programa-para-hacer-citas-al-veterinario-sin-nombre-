@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import "./Styles/Resenas.css";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function Resenas() {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/provider/misreviews", {
+    fetch(`${API_URL}/api/provider/misreviews`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`
       }

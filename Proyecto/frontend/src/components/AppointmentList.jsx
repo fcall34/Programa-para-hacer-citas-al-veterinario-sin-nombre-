@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Styles/AppointmentList.css";
 import ReviewForm from "./ReviewForm";
 import "./styles/ReviewForm.css";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function AppointmentsList() {
   const [appointments, setAppointments] = useState([]);
@@ -27,7 +28,7 @@ export default function AppointmentsList() {
     const fetchAppointments = async () => {
       try {
         const res = await fetch(
-          "http://localhost:3000/api/appointments/miscitas",
+          `${API_URL}/api/appointments/miscitas`,
           {
             headers: {
               Authorization: `Bearer ${token}`
