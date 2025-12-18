@@ -1,0 +1,101 @@
+/* MisServicios.css */
+
+/* Wrapper general */
+.mis-servicios-container {
+  padding: 20px 30px 50px;
+  width: 100%;
+}
+
+/* Título */
+.mis-servicios-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #333;
+  text-align: center;
+  margin-bottom: 30px;
+  border-bottom: 2px solid #f3f6fb;
+  padding-bottom: 15px;
+}
+
+/* Grid de servicios */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 25px;
+}
+
+/* Card del servicio */
+.service-card {
+  background-color: white;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+}
+
+/* Título del servicio */
+.service-card h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+/* Descripción */
+.service-desc {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.5;
+  margin-bottom: 15px;
+}
+
+/* Info del servicio */
+.service-info span {
+  display: block;
+  font-size: 14px;
+  color: #444;
+  margin-bottom: 6px;
+}
+
+.service-info strong {
+  color: #555;
+}
+
+/* Estado */
+.service-info span:last-child {
+  font-weight: 600;
+  color: #0066ff;
+}
+
+/* Footer */
+.service-footer {
+  margin-top: 15px;
+  padding-top: 12px;
+  border-top: 1px solid #f0f0f0;
+  font-size: 13px;
+  color: #777;
+}
+
+/* Sin servicios */
+.no-services {
+  text-align: center;
+  font-size: 16px;
+  color: #666;
+  margin-top: 40px;
+}
+
+/* Loading */
+.loading-screen {
+  text-align: center;
+  font-size: 16px;
+  color: #555;
+  padding: 40px;
+}

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Sidebar from "../components/sidebar.jsx"; // Asegúrate de la mayúscula si el archivo la tiene
+import Sidebar from "../components/sidebar.jsx"; 
 import CitasEnEspera from "../components/CitasEnEspera.jsx";
-import Stats from "../components/Stats.jsx"; // <--- Importar Stats
+import Stats from "../components/Stats.jsx"; 
 import Resenas from "../components/Resenas.jsx";
 import PublishService from "../components/PublicarServicio.jsx";
 import CompleteAppointment from "./CompleteAppointment.jsx";
