@@ -137,48 +137,74 @@ export const getProviderStats = async (req, res) => {
     const providerId = req.user.id;
     const pool = await poolPromise;
 
-    const result = await pool.request()
+    // STATS GENERALES
+    const statsResult = await pool.request()
       .input("provider_id", sql.Int, providerId)
       .query(`
         SELECT
           u.full_name,
-
-          -- citas completadas
-          COUNT(DISTINCT a.Appointment_id) AS completedAppointments,
-
-          -- ganancias
+          COUNT(DISTINCT a.appointment_id) AS completedAppointments,
           ISNULL(SUM(s.cost), 0) AS totalEarnings,
-
-          -- rating promedio del proveedor
           ROUND(AVG(CAST(r.rating AS FLOAT)), 1) AS avgRating
-
         FROM Users u
         LEFT JOIN Appointments a
           ON a.provider_id = u.user_id
           AND a.is_complete = 1
-
-        LEFT JOIN Services s 
-          ON a.service_id = s.service_id
-
+        LEFT JOIN Services s ON a.service_id = s.service_id
         LEFT JOIN Reviews r
           ON r.appointment_id = a.appointment_id
           AND r.review_target = 'provider'
-
         WHERE u.user_id = @provider_id
         GROUP BY u.full_name
       `);
 
+    // TOP POR CITAS
+    const byAppointments = await pool.request()
+      .input("provider_id", sql.Int, providerId)
+      .query(`
+        SELECT
+          s.service_id,
+          s.title,
+          COUNT(a.appointment_id) AS totalAppointments
+        FROM Services s
+        LEFT JOIN Appointments a
+          ON a.service_id = s.service_id
+          AND a.is_complete = 1
+        WHERE s.provider_id = @provider_id
+        GROUP BY s.service_id, s.title
+        ORDER BY totalAppointments DESC
+      `);
+
+    // TOP POR RATING
+    const byRating = await pool.request()
+      .input("provider_id", sql.Int, providerId)
+      .query(`
+        SELECT
+          s.service_id,
+          s.title,
+          ROUND(AVG(CAST(r.rating AS FLOAT)), 1) AS avgRating,
+          COUNT(r.review_id) AS totalReviews
+        FROM Services s
+        LEFT JOIN Appointments a ON a.service_id = s.service_id
+        LEFT JOIN Reviews r
+          ON r.appointment_id = a.appointment_id
+          AND r.review_target = 'service'
+        WHERE s.provider_id = @provider_id
+        GROUP BY s.service_id, s.title
+        HAVING COUNT(r.review_id) > 0
+        ORDER BY avgRating DESC
+      `);
+
     res.json({
       success: true,
-      stats: result.recordset[0]
+      stats: statsResult.recordset[0],
+      topByAppointments: byAppointments.recordset,
+      topByRating: byRating.recordset
     });
 
   } catch (error) {
-    console.error("Error obteniendo stats del proveedor:", error);
-    res.status(500).json({
-      success: false,
-      message: "Error del servidor"
-    });
+    console.error("Error obteniendo stats:", error);
+    res.status(500).json({ success: false });
   }
 };
 
