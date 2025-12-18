@@ -241,7 +241,7 @@ export const updateService = async (req, res) => {
       end_time
     } = req.body;
 
-    if (!title || !description || !cost || !location || !category_id || !start_time || !end_time) {
+    if (!title || !description || !cost || !category_id || !start_time || !end_time) {
       return res.status(400).json({
         success: false,
         message: "Faltan datos obligatorios"

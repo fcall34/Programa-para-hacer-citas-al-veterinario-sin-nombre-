@@ -261,7 +261,11 @@ export default function MisServicios() {
 
               <div className="service-info">
                 <span><strong>Costo:</strong> ${s.cost}</span>
-                <span><strong>Horario:</strong> {s.start_time} - {s.end_time}</span>
+                <span>
+                <strong>Horario:</strong>{" "}
+                {formatTime(s.start_time)} - {formatTime(s.end_time)}
+                </span>
+
                 <span>
                   <strong>Estado:</strong>{" "}
                   {s.available ? "Disponible" : "No disponible"}
