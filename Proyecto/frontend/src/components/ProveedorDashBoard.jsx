@@ -6,6 +6,7 @@ import Resenas from "../components/Resenas.jsx";
 import PublishService from "../components/PublicarServicio.jsx";
 import CompleteAppointment from "./CompleteAppointment.jsx";
 import UserProfile from "./UserProfile.jsx";
+import MisServicios from "./MisServicios.jsx";
 import './Styles/ProveedorDashBoard.css';
 
 export default function ProveedorDashBoard() {
@@ -16,6 +17,8 @@ export default function ProveedorDashBoard() {
     switch (selected) {
       case "publicar":
         return <PublishService />;
+      case "misservicios":
+        return <MisServicios />;
       case "citas":
         return <CitasEnEspera />;
       case "Complete-citas":
@@ -33,9 +36,6 @@ export default function ProveedorDashBoard() {
 
   return (
     <div className="dashboard-layout">
-      {/* Pasamos 'selected' para que el sidebar sepa cuál pintar de azul 
-         y 'setSelected' para cambiar la opción 
-      */}
       <Sidebar onSelect={setSelected} selectedOption={selected} />
       
       <div className="dashboard-content">

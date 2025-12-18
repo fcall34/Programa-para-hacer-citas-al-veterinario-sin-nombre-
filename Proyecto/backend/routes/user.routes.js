@@ -15,7 +15,7 @@ from "../Controllers/Appointment.Controllers.js";
 /* ================================
    CONTROLADORES PROVEEDOR
    ================================ */
-import { publishService, ViewAllAppointments, UpdateAppointmentStatus, getProviderStats } 
+import { publishService, ViewAllAppointments, UpdateAppointmentStatus, getProviderStats, getMyServices} 
 from "../Controllers/Provider.Controllers.js";
 
 /* ================================
@@ -56,6 +56,7 @@ const router = express.Router();
 
 router.get("/provider/misreviews",verifyToken, requireRole(ROLES.PROVIDER), getProviderReviews);
 router.get("/provider/stats",verifyToken,requireRole(ROLES.PROVIDER),getProviderStats);
+router.get("/provider/misservicios", verifyToken, requireRole(ROLES.PROVIDER), getMyServices);
 
 
 /* ================================

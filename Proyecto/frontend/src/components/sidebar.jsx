@@ -20,6 +20,13 @@ export default function Sidebar({ onSelect, selectedOption }) {
       </button>
 
       <button
+        className={getButtonClass("misservicios")}
+        onClick={() => onSelect("misservicios")}
+      >
+        Mis Servicios
+      </button>
+
+      <button
         className={getButtonClass("citas")}
         onClick={() => onSelect("citas")}
       >

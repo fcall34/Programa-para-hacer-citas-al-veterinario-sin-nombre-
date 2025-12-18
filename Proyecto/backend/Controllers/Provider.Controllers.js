@@ -181,3 +181,45 @@ export const getProviderStats = async (req, res) => {
     });
   }
 };
+
+
+export const getMyServices = async (req, res) => {
+  try {
+    const provider_id = req.user.id;
+    const pool = await poolPromise;
+
+    const result = await pool.request()
+      .input("provider_id", sql.Int, provider_id)
+      .query(`
+        SELECT
+          s.service_id,
+          s.title,
+          s.description,
+          s.cost,
+          s.location,
+          s.available,
+          s.category_id,
+          c.category_name,
+          CONVERT(varchar(10), s.created_at, 120) AS created_at,
+          CONVERT(varchar(10), s.expiration_date, 120) AS expiration_date,
+          s.start_time,
+          s.end_time
+        FROM Services s
+        LEFT JOIN Categories c ON s.category_id = c.category_id
+        WHERE s.provider_id = @provider_id
+        ORDER BY s.created_at DESC
+      `);
+
+    return res.json({
+      success: true,
+      data: result.recordset
+    });
+
+  } catch (error) {
+    console.error("Error getMyServices:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Error interno del servidor"
+    });
+  }
+};
