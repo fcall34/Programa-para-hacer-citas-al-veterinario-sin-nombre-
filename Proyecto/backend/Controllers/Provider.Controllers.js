@@ -319,11 +319,10 @@ export const deleteService = async (req, res) => {
   try {
     const provider_id = req.user.id;
     const { id } = req.params;
-
     const pool = await poolPromise;
 
-    /* 🔐 Validar propiedad */
-    const check = await pool.request()
+    /* 🔐 Validar que el servicio pertenece al proveedor */
+    const checkService = await pool.request()
       .input("service_id", sql.Int, id)
       .input("provider_id", sql.Int, provider_id)
       .query(`
@@ -333,13 +332,30 @@ export const deleteService = async (req, res) => {
           AND provider_id = @provider_id
       `);
 
-    if (check.recordset.length === 0) {
+    if (checkService.recordset.length === 0) {
       return res.status(403).json({
         success: false,
         message: "No tienes permiso para eliminar este servicio"
       });
     }
 
+    /* 🚫 Verificar si existen citas asociadas */
+    const checkAppointments = await pool.request()
+      .input("service_id", sql.Int, id)
+      .query(`
+        SELECT COUNT(*) AS total
+        FROM Appointments
+        WHERE service_id = @service_id
+      `);
+
+    if (checkAppointments.recordset[0].total > 0) {
+      return res.status(400).json({
+        success: false,
+        message: "No se puede eliminar el servicio porque tiene citas asociadas"
+      });
+    }
+
+    /* ✅ Eliminar servicio */
     await pool.request()
       .input("service_id", sql.Int, id)
       .query(`
