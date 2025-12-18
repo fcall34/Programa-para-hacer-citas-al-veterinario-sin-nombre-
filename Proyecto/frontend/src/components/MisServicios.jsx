@@ -29,21 +29,30 @@ export default function MisServicios() {
   }, []);
 
   const handleDelete = async (id) => {
-    if (!window.confirm("¿Seguro que deseas eliminar este servicio?")) return;
+  if (!window.confirm("¿Seguro que deseas eliminar este servicio?")) return;
 
-    try {
-      const res = await fetch(`${API_URL}/api/services/${id}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` }
-      });
+  try {
+    const res = await fetch(`${API_URL}/api/services/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
 
-      const data = await res.json();
-      if (data.success) fetchMyServices();
-      else alert("Error al eliminar");
-    } catch (error) {
-      console.error(error);
+    const data = await res.json();
+
+    if (!data.success) {
+      alert(data.message); 
+      return;
     }
-  };
+
+    fetchMyServices(); 
+
+  } catch (error) {
+    alert("Error al conectar con el servidor");
+  }
+};
+
 
   const handleUpdate = async (e) => {
     e.preventDefault();
