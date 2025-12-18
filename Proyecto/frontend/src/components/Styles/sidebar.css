@@ -66,3 +66,26 @@
   padding-top: 20px;
   border-top: 1px solid #eee;
 }
+
+.sidebar-brand {
+  text-align: center;
+  padding: 24px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  margin-bottom: 12px;
+}
+
+.brand-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin: 0;
+  color: #ffffff;
+}
+
+.brand-subtitle {
+  font-size: 0.75rem;
+  color: #bdbdbd;
+  margin-top: 4px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}

@@ -10,8 +10,14 @@ export default function Sidebar({ onSelect, selectedOption }) {
 
   return (
     <div className="sidebar-container">
-      <h2 className="sidebar-title">A Point Date</h2>
 
+      {/* 🔵 BRAND / HEADER */}
+      <div className="sidebar-brand">
+        <h1 className="brand-title">A point date</h1>
+        <p className="brand-subtitle">Panel del proveedor</p>
+      </div>
+
+      {/* 🔵 MENU */}
       <button
         className={getButtonClass("publicar")}
         onClick={() => onSelect("publicar")}
@@ -61,6 +67,7 @@ export default function Sidebar({ onSelect, selectedOption }) {
         Mi perfil
       </button>
 
+      {/* 🔵 FOOTER */}
       <div className="sidebar-footer">
         <LogoutButton />
       </div>
