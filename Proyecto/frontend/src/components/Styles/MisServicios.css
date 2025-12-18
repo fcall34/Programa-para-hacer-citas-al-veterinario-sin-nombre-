@@ -99,3 +99,44 @@
   color: #555;
   padding: 40px;
 }
+
+.service-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.edit-btn,
+.delete-btn,
+.cancel-btn {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.edit-btn {
+  background-color: #0066ff;
+  color: white;
+}
+
+.edit-btn:hover {
+  background-color: #0052cc;
+}
+
+.delete-btn {
+  background-color: #ff4d4f;
+  color: white;
+}
+
+.delete-btn:hover {
+  background-color: #d9363e;
+}
+
+.cancel-btn {
+  background-color: #eee;
+  margin-top: 10px;
+}

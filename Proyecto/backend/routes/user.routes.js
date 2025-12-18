@@ -15,7 +15,9 @@ from "../Controllers/Appointment.Controllers.js";
 /* ================================
    CONTROLADORES PROVEEDOR
    ================================ */
-import { publishService, ViewAllAppointments, UpdateAppointmentStatus, getProviderStats, getMyServices} 
+import { publishService, ViewAllAppointments, UpdateAppointmentStatus, getProviderStats, getMyServices,
+   updateService, deleteService
+} 
 from "../Controllers/Provider.Controllers.js";
 
 /* ================================
@@ -141,6 +143,10 @@ router.put("/provider/status/:id", verifyToken, UpdateAppointmentStatus);
 router.get("/provider/accepted",verifyToken,requireRole(ROLES.PROVIDER),getAcceptedAppointmentsByProvider);
 //completar citas 
 router.put("/provider/complete",verifyToken,requireRole(ROLES.PROVIDER),completeAppointment);
+
+
+router.delete("/services/:id",verifyToken,requireRole(ROLES.PROVIDER),deleteService);
+router.put("/services/:id",verifyToken,requireRole(ROLES.PROVIDER),updateService);
 
 
 
