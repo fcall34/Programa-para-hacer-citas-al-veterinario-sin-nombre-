@@ -199,13 +199,13 @@ export const getMyServices = async (req, res) => {
           s.location,
           s.available,
           s.category_id,
-          c.category_name,
+          c.category_description,
           CONVERT(varchar(10), s.created_at, 120) AS created_at,
           CONVERT(varchar(10), s.expiration_date, 120) AS expiration_date,
           s.start_time,
           s.end_time
         FROM Services s
-        LEFT JOIN Categories c ON s.category_id = c.category_id
+        LEFT JOIN Category c ON s.category_id = c.category_id
         WHERE s.provider_id = @provider_id
         ORDER BY s.created_at DESC
       `);
