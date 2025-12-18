@@ -2,11 +2,20 @@ import React, { useEffect, useState } from "react";
 import "./Styles/MisServicios.css";
 
 const API_URL = import.meta.env.VITE_API_URL;
+const CATEGORIES = [
+  { id: 1, label: "Belleza" },
+  { id: 2, label: "Salud" },
+  { id: 3, label: "Entretenimiento" },
+  { id: 4, label: "Servicios del hogar" },
+  { id: 5, label: "Tecnología" }
+];
 
 export default function MisServicios() {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editingService, setEditingService] = useState(null);
+  const [categories, setCategories] = useState([]);
+
 
   const token = localStorage.getItem("token");
 
@@ -92,83 +101,134 @@ export default function MisServicios() {
           <h2>Editar Servicio</h2>
 
           <form onSubmit={handleUpdate}>
+
+            {/* TÍTULO */}
             <div className="form-group">
-              <label>Título</label>
-              <input
+                <label>Título</label>
+                <input
                 className="form-input"
                 value={editingService.title}
                 onChange={(e) =>
-                  setEditingService({ ...editingService, title: e.target.value })
+                    setEditingService({ ...editingService, title: e.target.value })
                 }
-              />
+                required
+                />
             </div>
 
+            {/* DESCRIPCIÓN */}
             <div className="form-group">
-              <label>Descripción</label>
-              <textarea
+                <label>Descripción</label>
+                <textarea
                 className="form-textarea"
                 value={editingService.description}
                 onChange={(e) =>
-                  setEditingService({
+                    setEditingService({
                     ...editingService,
                     description: e.target.value
-                  })
+                    })
                 }
-              />
+                required
+                />
             </div>
 
+            {/* COSTO */}
             <div className="form-group">
-              <label>Costo</label>
-              <input
+                <label>Costo</label>
+                <input
                 type="number"
                 className="form-input"
                 value={editingService.cost}
                 onChange={(e) =>
-                  setEditingService({ ...editingService, cost: e.target.value })
+                    setEditingService({ ...editingService, cost: e.target.value })
                 }
-              />
+                required
+                />
             </div>
 
-            <div className="form-row">
-              <div className="form-group">
-                <label>Hora inicio</label>
-                <input
-                  className="form-input"
-                  value={editingService.start_time}
-                  onChange={(e) =>
-                    setEditingService({
-                      ...editingService,
-                      start_time: e.target.value
-                    })
-                  }
-                />
-              </div>
+                    {/* CATEGORÍA */}
+                    <div className="form-group">
+                        <label>Categoría</label>
+                        <select
+                        className="form-select"
+                        value={editingService.category_id}
+                        onChange={(e) =>
+                            setEditingService({
+                            ...editingService,
+                            category_id: Number(e.target.value)
+                            })
+                        }
+                        required
+                        >
+                        <option value="">Selecciona una categoría</option>
+                        {CATEGORIES.map((c) => (
+                            <option key={c.id} value={c.id}>
+                            {c.label}
+                            </option>
+                        ))}
+                        </select>
+                    </div>
 
-              <div className="form-group">
-                <label>Hora fin</label>
-                <input
-                  className="form-input"
-                  value={editingService.end_time}
-                  onChange={(e) =>
-                    setEditingService({
-                      ...editingService,
-                      end_time: e.target.value
-                    })
-                  }
-                />
-              </div>
-            </div>
+                    {/* DISPONIBLE */}
+                    <div className="checkbox-group">
+                        <input
+                        type="checkbox"
+                        checked={editingService.available}
+                        onChange={(e) =>
+                            setEditingService({
+                            ...editingService,
+                            available: e.target.checked
+                            })
+                        }
+                        />
+                        <label>Servicio disponible</label>
+                    </div>
 
-            <button className="publish-btn">Guardar Cambios</button>
+                    {/* HORARIOS */}
+                    <div className="form-row">
+                        <div className="form-group">
+                        <label>Hora de inicio</label>
+                        <input
+                            className="form-input"
+                            type="time"
+                            value={editingService.start_time}
+                            onChange={(e) =>
+                            setEditingService({
+                                ...editingService,
+                                start_time: e.target.value
+                            })
+                            }
+                            required
+                        />
+                        </div>
 
-            <button
-              type="button"
-              className="cancel-btn"
-              onClick={() => setEditingService(null)}
-            >
-              Cancelar
-            </button>
-          </form>
+                        <div className="form-group">
+                        <label>Hora de fin</label>
+                        <input
+                            className="form-input"
+                            type="time"
+                            value={editingService.end_time}
+                            onChange={(e) =>
+                            setEditingService({
+                                ...editingService,
+                                end_time: e.target.value
+                            })
+                            }
+                            required
+                        />
+                        </div>
+                    </div>
+
+                    <button className="publish-btn">Guardar Cambios</button>
+
+                    <button
+                        type="button"
+                        className="cancel-btn"
+                        onClick={() => setEditingService(null)}
+                    >
+                        Cancelar
+                    </button>
+                    </form>
+
         </div>
       </div>
     );
