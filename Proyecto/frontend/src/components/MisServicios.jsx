@@ -10,6 +10,18 @@ const CATEGORIES = [
   { id: 5, label: "Tecnología" }
 ];
 
+function formatTime(timeValue) {
+  if (!timeValue) return "";
+
+  // Si viene como Date ISO (1970-01-01T01:22:00.000Z)
+  const date = new Date(timeValue);
+
+  const hours = String(date.getUTCHours()).padStart(2, "0");
+  const minutes = String(date.getUTCMinutes()).padStart(2, "0");
+
+  return `${hours}:${minutes}`;
+}
+
 export default function MisServicios() {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -258,10 +270,17 @@ export default function MisServicios() {
 
               <div className="service-actions">
                 <button
-                  className="edit-btn"
-                  onClick={() => setEditingService(s)}
-                >
-                  ✏️ Editar
+                    className="edit-btn"
+                    onClick={() =>
+                        setEditingService({
+                        ...s,
+                        start_time: formatTime(s.start_time),
+                        end_time: formatTime(s.end_time),
+                        available: Boolean(s.available)
+                        })
+                    }
+                    >
+                    ✏️ Editar
                 </button>
 
                 <button
