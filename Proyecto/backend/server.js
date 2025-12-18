@@ -39,9 +39,6 @@ app.get("/api/health", (req, res) => {
 
 app.use('/api', userRoutes);
 
-//healtcheck
-
-
 
 app.listen(PORT, () => console.log(`Servidor corriendo en http://localhost:${PORT}`));
 

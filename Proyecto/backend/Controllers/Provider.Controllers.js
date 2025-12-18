@@ -223,3 +223,140 @@ export const getMyServices = async (req, res) => {
     });
   }
 };
+
+export const updateService = async (req, res) => {
+  try {
+    const provider_id = req.user.id;
+    const { id } = req.params;
+
+    const {
+      title,
+      description,
+      cost,
+      location,
+      available,
+      category_id,
+      expiration_date,
+      start_time,
+      end_time
+    } = req.body;
+
+    if (!title || !description || !cost || !location || !category_id || !start_time || !end_time) {
+      return res.status(400).json({
+        success: false,
+        message: "Faltan datos obligatorios"
+      });
+    }
+
+    if (start_time >= end_time) {
+      return res.status(400).json({
+        success: false,
+        message: "La hora de cierre debe ser mayor a la de inicio"
+      });
+    }
+
+    const pool = await poolPromise;
+
+    const check = await pool.request()
+      .input("service_id", sql.Int, id)
+      .input("provider_id", sql.Int, provider_id)
+      .query(`
+        SELECT service_id
+        FROM Services
+        WHERE service_id = @service_id
+          AND provider_id = @provider_id
+      `);
+
+    if (check.recordset.length === 0) {
+      return res.status(403).json({
+        success: false,
+        message: "No tienes permiso para editar este servicio"
+      });
+    }
+
+    await pool.request()
+      .input("service_id", sql.Int, id)
+      .input("title", sql.VarChar(100), title)
+      .input("description", sql.VarChar(sql.MAX), description)
+      .input("cost", sql.Decimal(10, 2), cost)
+      .input("location", sql.VarChar(150), location)
+      .input("available", sql.Bit, available)
+      .input("category_id", sql.Int, category_id)
+      .input("expiration_date", sql.Date, expiration_date)
+      .input("start_time", sql.VarChar, start_time)
+      .input("end_time", sql.VarChar, end_time)
+      .query(`
+        UPDATE Services
+        SET
+          title = @title,
+          description = @description,
+          cost = @cost,
+          location = @location,
+          available = @available,
+          category_id = @category_id,
+          expiration_date = @expiration_date,
+          start_time = @start_time,
+          end_time = @end_time
+        WHERE service_id = @service_id
+      `);
+
+    res.json({
+      success: true,
+      message: "Servicio actualizado correctamente"
+    });
+
+  } catch (error) {
+    console.error("Error updateService:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error interno del servidor"
+    });
+  }
+};
+
+
+export const deleteService = async (req, res) => {
+  try {
+    const provider_id = req.user.id;
+    const { id } = req.params;
+
+    const pool = await poolPromise;
+
+    /* 🔐 Validar propiedad */
+    const check = await pool.request()
+      .input("service_id", sql.Int, id)
+      .input("provider_id", sql.Int, provider_id)
+      .query(`
+        SELECT service_id
+        FROM Services
+        WHERE service_id = @service_id
+          AND provider_id = @provider_id
+      `);
+
+    if (check.recordset.length === 0) {
+      return res.status(403).json({
+        success: false,
+        message: "No tienes permiso para eliminar este servicio"
+      });
+    }
+
+    await pool.request()
+      .input("service_id", sql.Int, id)
+      .query(`
+        DELETE FROM Services
+        WHERE service_id = @service_id
+      `);
+
+    res.json({
+      success: true,
+      message: "Servicio eliminado correctamente"
+    });
+
+  } catch (error) {
+    console.error("Error deleteService:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error interno del servidor"
+    });
+  }
+};
