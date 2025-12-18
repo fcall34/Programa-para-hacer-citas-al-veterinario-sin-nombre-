@@ -27,12 +27,6 @@ export default function Register() {
   const handleChange = e =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
-  /* 🔐 Validar contraseña segura */
-  const isValidPassword = (password) => {
-    const regex =
-      /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#._-])[A-Za-z\d@$!%*?&#._-]{8,}$/;
-    return regex.test(password);
-  };
 
   /* 📱 Validar teléfono */
   const isValidPhone = (phone) => {
@@ -48,12 +42,7 @@ export default function Register() {
       return;
     }
 
-    if (!isValidPassword(form.password)) {
-      alert(
-        "La contraseña debe tener mínimo 8 caracteres, una mayúscula, un número y un símbolo."
-      );
-      return;
-    }
+
 
     try {
       const res = await fetch(`${API_URL}/api/register`, {
