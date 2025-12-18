@@ -1,37 +1,16 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Styles/Register.css';
+
 const API_URL = import.meta.env.VITE_API_URL;
 
 const CIUDADES_MEXICO = [
-  "Aguascalientes",
-  "Cancún",
-  "Celaya",
-  "Chihuahua",
-  "Ciudad de México",
-  "Ciudad Juárez",
-  "Cuernavaca",
-  "Guadalajara",
-  "Hermosillo",
-  "León",
-  "Mérida",
-  "Monterrey",
-  "Morelia",
-  "Pachuca",
-  "Puebla",
-  "Querétaro",
-  "Saltillo",
-  "San Luis Potosí",
-  "Tijuana",
-  "Toluca",
-  "Torreón",
-  "Tuxtla Gutiérrez",
-  "Veracruz",
-  "Villahermosa",
-  "Xalapa",
-  "Zacatecas"
+  "Aguascalientes", "Cancún", "Celaya", "Chihuahua", "Ciudad de México",
+  "Ciudad Juárez", "Cuernavaca", "Guadalajara", "Hermosillo", "León",
+  "Mérida", "Monterrey", "Morelia", "Pachuca", "Puebla", "Querétaro",
+  "Saltillo", "San Luis Potosí", "Tijuana", "Toluca", "Torreón",
+  "Tuxtla Gutiérrez", "Veracruz", "Villahermosa", "Xalapa", "Zacatecas"
 ];
-
 
 export default function Register() {
   const [form, setForm] = useState({
@@ -48,16 +27,38 @@ export default function Register() {
   const handleChange = e =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
+  /* 🔐 Validar contraseña segura */
+  const isValidPassword = (password) => {
+    const regex =
+      /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#._-])[A-Za-z\d@$!%*?&#._-]{8,}$/;
+    return regex.test(password);
+  };
+
+  /* 📱 Validar teléfono */
+  const isValidPhone = (phone) => {
+    return /^\d{10}$/.test(phone);
+  };
+
   const handleSubmit = async e => {
     e.preventDefault();
 
+    /* 🔴 Validaciones */
+    if (!isValidPhone(form.phone)) {
+      alert("El teléfono debe tener exactamente 10 dígitos.");
+      return;
+    }
+
+    if (!isValidPassword(form.password)) {
+      alert(
+        "La contraseña debe tener mínimo 8 caracteres, una mayúscula, un número y un símbolo."
+      );
+      return;
+    }
+
     try {
-      // Asegúrate de que la URL coincida con el puerto de tu backend (ej. 3000)
       const res = await fetch(`${API_URL}/api/register`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form)
       });
 
@@ -77,35 +78,36 @@ export default function Register() {
   };
 
   return (
-    // Contenedor principal (Fondo gris)
     <div className="register-wrapper">
-      
-      {/* Tarjeta blanca centrada */}
       <div className="register-card">
         <h2>Crear Cuenta</h2>
-        
+
         <form onSubmit={handleSubmit}>
-          <input 
+          <input
             className="register-input"
-            name="full_name" 
-            placeholder="Nombre completo" 
-            onChange={handleChange} 
-            required 
+            name="full_name"
+            placeholder="Nombre completo"
+            onChange={handleChange}
+            required
           />
-          <input 
-            className="register-input" 
-            name="email" 
+
+          <input
+            className="register-input"
+            name="email"
             type="email"
-            placeholder="Correo electrónico" 
-            onChange={handleChange} 
-            required 
+            placeholder="Correo electrónico"
+            onChange={handleChange}
+            required
           />
-          <input 
-            className="register-input" 
-            name="phone" 
-            placeholder="Teléfono" 
-            onChange={handleChange} 
+
+          <input
+            className="register-input"
+            name="phone"
+            placeholder="Teléfono (10 dígitos)"
+            onChange={handleChange}
+            required
           />
+
           <select
             className="register-input"
             name="location"
@@ -121,30 +123,33 @@ export default function Register() {
             ))}
           </select>
 
-          <input 
-            className="register-input" 
-            type="password" 
-            name="password" 
-            placeholder="Contraseña" 
-            onChange={handleChange} 
-            required 
-          />
-          <select 
+          <input
             className="register-input"
-            name="user_type" 
-            onChange={handleChange} 
+            type="password"
+            name="password"
+            placeholder="Contraseña"
+            onChange={handleChange}
+            required
+          />
+
+          <select
+            className="register-input"
+            name="user_type"
+            onChange={handleChange}
             value={form.user_type}
-            style={{cursor: 'pointer'}}
+            style={{ cursor: 'pointer' }}
           >
             <option value={1}>Soy Cliente (Busco servicios)</option>
             <option value={2}>Soy Proveedor (Ofrezco servicios)</option>
           </select>
 
-          <button type="submit" className="register-btn">Registrarse</button>
+          <button type="submit" className="register-btn">
+            Registrarse
+          </button>
         </form>
 
         <p className="register-footer">
-          ¿Ya tienes una cuenta? 
+          ¿Ya tienes una cuenta?{" "}
           <Link to="/login">Inicia sesión aquí</Link>
         </p>
       </div>
