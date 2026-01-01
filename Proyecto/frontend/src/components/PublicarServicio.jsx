@@ -3,17 +3,24 @@ import './Styles/PublicarServicio.css';
 const API_URL = import.meta.env.VITE_API_URL;
 
 export default function PublicarServicio() {
+  const [images, setImages] = useState([]);
+
+  const [selectedCategories, setSelectedCategories] = useState([]);
+
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     cost: "",
     location: "",
     available: true, 
-    category_id: "",
+    category_ids: [],
+    start_date: "",
     expiration_date: "",
     start_time: "",
     end_time: ""
   });
+
+  
 
   const categories = [
     { id: 1, name: "Belleza" },
@@ -23,6 +30,7 @@ export default function PublicarServicio() {
     { id: 5, name: "Tecnología" }
   ];
 
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
@@ -31,38 +39,53 @@ export default function PublicarServicio() {
     });
   };
 
-  const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
+      console.log("SUBMIT");
+
       const token = localStorage.getItem("token");
-      if (!token) {
-        alert("No hay token, inicia sesión primero");
-        return;
+      if (!token) return alert("No hay token");
+
+      const data = new FormData();
+
+      // Campos normales
+      Object.entries(formData).forEach(([key, value]) => {
+        data.append(key, value);
+      });
+      //categorias
+      selectedCategories.forEach((catId) => {
+        data.append("category_ids[]", catId);
+      });
+
+      // Imágenes
+      for (let i = 0; i < images.length; i++) {
+        data.append("images", images[i]);
       }
 
       const res = await fetch(`${API_URL}/api/provider/publish`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer " + token
+          Authorization: "Bearer " + token
         },
-        body: JSON.stringify(formData)
+        body: data
       });
 
-      const data = await res.json();
+      const result = await res.json();
 
       if (res.ok) {
         alert("Servicio publicado correctamente");
-        // Opcional: Limpiar el formulario después de éxito
-        setFormData({ ...formData, title: "", description: "", cost: "" }); 
       } else {
-        alert("Error: " + (data.error || data.message));
+        alert(result.error || result.message);
       }
+
     } catch (error) {
       console.error(error);
-      alert("Error al publicar el servicio");
+      alert("Error al publicar servicio");
     }
   };
+
 
   return (
     <div className="publish-wrapper">
@@ -109,22 +132,35 @@ export default function PublicarServicio() {
                 required 
               />
             </div>
-            
+
             <div className="form-group">
-              <label>Categoría</label>
-              <select 
-                className="form-select"
-                name="category_id" 
-                value={formData.category_id} 
-                onChange={handleChange} 
-                required
-              >
-                <option value="">Selecciona una opción</option>
+              <label>Categorías</label>
+              <div className="category-tags">
                 {categories.map((cat) => (
-                  <option key={cat.id} value={cat.id}>{cat.name}</option>
+                  <button
+                    type="button"
+                    key={cat.id}
+                    className={
+                      selectedCategories.includes(cat.id)
+                        ? "category-tag active"
+                        : "category-tag"
+                    }
+                    onClick={() => {
+                      setSelectedCategories((prev) =>
+                        prev.includes(cat.id)
+                          ? prev.filter((id) => id !== cat.id)
+                          : [...prev, cat.id]
+                      );
+                    }}
+                  >
+                    {cat.name}
+                  </button>
                 ))}
-              </select>
+              </div>
             </div>
+
+            
+            
           </div>
 
           <div className="form-group">
@@ -141,6 +177,20 @@ export default function PublicarServicio() {
           </div>
 
           {/* Fila para fechas y horas */}
+          <div className="form-row">
+            <div className="form-group">
+              <label>Fecha de Inicio</label>
+              <input 
+                className="form-input"
+                type="date" 
+                name="start_date" 
+                value={formData.start_date} 
+                onChange={handleChange} 
+                required 
+              />
+            </div>
+          </div>
+
           <div className="form-row">
             <div className="form-group">
               <label>Fecha límite (Expiración)</label>
@@ -179,6 +229,17 @@ export default function PublicarServicio() {
                 required
               />
             </div>
+
+            <div className="form-group">
+            <label>Imágenes del servicio</label>
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={(e) => setImages(e.target.files)}
+            />
+          </div>
+
           </div>
 
           <div className="checkbox-group">

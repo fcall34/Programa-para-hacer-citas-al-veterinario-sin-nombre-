@@ -1,5 +1,8 @@
-import React from "react";
+import { useState } from "react";
+import StarsDisplay from "./StarsDisplay";
 import "./Styles/ServiceDetailCrd.css";
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 function formatTime(timeValue) {
   if (!timeValue) return "";
@@ -8,95 +11,98 @@ function formatTime(timeValue) {
   return `${match[1]}:${match[2]}`;
 }
 
-export default function ServiceDetailCard({ service, onOpenSchedule }) {
-  if (!service) {
-    return (
-      <p className="no-service">
-        Selecciona un servicio para ver los detalles
-      </p>
+export default function ServiceDetailCard({ service, onClose }) {
+  const [currentImage, setCurrentImage] = useState(0);
+
+  const images = service.images || [];
+
+  const nextImage = () => {
+    setCurrentImage((prev) =>
+      prev === images.length - 1 ? 0 : prev + 1
     );
-  }
+  };
 
-  // ⭐ normalizamos el promedio
-  const avgRating = Number(service.avg_rating);
-  const ratingText = !isNaN(avgRating)
-    ? avgRating.toFixed(1)
-    : "0.0";
-
-  const reviewCount = service.review_count ?? 0;
+  const prevImage = () => {
+    setCurrentImage((prev) =>
+      prev === 0 ? images.length - 1 : prev - 1
+    );
+  };
 
   return (
-    <div className="detail-card">
+    <div className="service-detail-card">
 
-      {/* HEADER */}
-      <div className="detail-header">
-        <h2 className="detail-title">{service.title}</h2>
+      <button className="close-btn" onClick={onClose}>✕</button>
 
-        <div className="detail-actions">
-          <button className="apply-btn" onClick={onOpenSchedule}>
-            Agendar cita
-          </button>
-          <button className="icon-btn">❤️</button>
-          <button className="icon-btn">🔗</button>
-        </div>
+
+      <div className="carousel">
+        {images.length > 0 ? (
+          <>
+            <img
+              src={`${API_URL}${images[currentImage].image_url}`}
+              alt="Servicio"
+              className="carousel-img"
+            />
+
+            {images.length > 1 && (
+              <>
+                <button className="carousel-btn left" onClick={prevImage}>
+                  ‹
+                </button>
+                <button className="carousel-btn right" onClick={nextImage}>
+                  ›
+                </button>
+              </>
+            )}
+          </>
+        ) : (
+          <img src="/placeholder.jpg" className="carousel-img" />
+        )}
       </div>
 
-      {/* INFORMACIÓN */}
-      <div className="detail-section">
-        <h3>Información del servicio</h3>
+      <div className="detail-info">
 
-        <div className="info-row">
-          <span className="info-icon">💵</span>
-          <div>
-            <p className="info-label">Costo</p>
-            <div className="badge green">${service.cost}</div>
-          </div>
+        <h2 className="title">{service.title}</h2>
+
+        {/* Categorías */}
+        <div className="categories">
+          {service.categories.map((c, i) => (
+            <span key={i} className="category-tag">
+              {c.category_description}
+            </span>
+          ))}
         </div>
 
-        <div className="info-row">
-          <span className="info-icon">⏰</span>
-          <div>
-            <p className="info-label">Horario</p>
-            <p>
-              {formatTime(service.start_time)} -{" "}
-              {formatTime(service.end_time)}
-            </p>
-          </div>
+        <div className="rating">
+          <StarsDisplay value={Number(service.avg_rating) || 0} />
+          <span>({service.review_count})</span>
         </div>
 
-        <div className="info-row">
-          <span className="info-icon">📦</span>
-          <div>
-            <p className="info-label">Categoría</p>
-            <div className="badge blue">
-              {service.category_description ?? "Sin categoría"}
-            </div>
-          </div>
+
+        <div className="price">
+          💲 {service.cost}
         </div>
 
-        {/* ⭐ PROMEDIO DE ESTRELLAS */}
-        <div className="info-row">
-          <span className="info-icon">⭐</span>
-          <div>
-            <p className="info-label">Calificación</p>
-            <p>
-              <strong>{ratingText}</strong> / 5
-              {" "}({reviewCount} reseñas)
-            </p>
-          </div>
+        <div className="schedule">
+          ⏰ {formatTime(service.start_time)} - {formatTime(service.end_time)}
         </div>
-      </div>
 
-      {/* DESCRIPCIÓN */}
-      <div className="detail-section">
-        <h3>Descripción</h3>
-        <p className="detail-description">{service.description}</p>
-      </div>
 
-      {/* UBICACIÓN */}
-      <div className="detail-section">
-        <h3>Ubicación</h3>
-        <p>📍 {service.location}</p>
+        <div className="location">
+          📍 {service.location}
+        </div>
+
+        <div className="provider">
+          👤 {service.provider_name}
+        </div>
+
+
+        <p className="description">
+          {service.description}
+        </p>
+
+        <button className="book-btn">
+          Agendar cita
+        </button>
       </div>
     </div>
   );

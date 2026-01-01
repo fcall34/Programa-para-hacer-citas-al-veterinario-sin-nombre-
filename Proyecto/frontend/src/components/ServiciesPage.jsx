@@ -8,54 +8,86 @@ export default function ServicesPage() {
   const [selected, setSelected] = useState(null);
 
   useEffect(() => {
-    fetch(`${API_URL}/api/services`)
-      .then(res => res.json())
-      .then(res => {
-        if (res.success) {
-          setServices(res.data);
-        }
-      });
-  }, []);
+  fetch(`${API_URL}/api/services`)
+    .then(res => res.json())
+    .then(res => {
+      if (res.success) {
+        const parsed = res.data.map(service => ({
+          ...service,
+          categories: service.categories
+            ? JSON.parse(service.categories)
+            : [],
+          images: service.images
+            ? JSON.parse(service.images)
+            : []
+        }));
+
+        setServices(parsed);
+      }
+    });
+}, []);
+
+
 
   const handleSelect = (id) => {
-    fetch(`${API_URL}/api/services/${id}`)
-      .then(res => res.json())
-      .then(res => {
-        if (res.success) {
-          setSelected(res.data);
-        }
-      });
-  };
+  fetch(`${API_URL}/api/services/${id}`)
+    .then(res => res.json())
+    .then(res => {
+      if (res.success) {
+        const parsedService = {
+          ...res.data,
+          categories: res.data.categories
+            ? JSON.parse(res.data.categories)
+            : [],
+          images: res.data.images
+            ? JSON.parse(res.data.images)
+            : []
+        };
 
-  return (
-    <div className="flex p-4">
-      {/* LISTA DE SERVICIOS */}
-      <div className="w-1/3">
-        <h2 className="font-bold mb-2">Servicios</h2>
+        setSelected(parsedService);
+      }
+    });
+};
 
-        {services.map(service => (
-          <ServiceCard
-            key={service.service_id}
-            title={service.title}
-            price={service.cost}
-            category={service.category_description}
-            start_time={service.start_time}
-            end_time={service.end_time}
-            rating={Number(service.avg_rating) || 0}     // ⭐⭐⭐⭐⭐
-            reviewCount={service.review_count || 0}
-            distance={2.5}
-            onClick={() => handleSelect(service.service_id)}
-          />
-        ))}
-      </div>
+return (
+  <div className="services-page">
 
-      {/* DETALLE DEL SERVICIO */}
-      <div className="w-2/3 p-4 border-l">
-        <ServiceDetailCard
-          service={selected}
-          onOpenSchedule={() => console.log("Abrir agenda")}
+    {/* COLUMNA IZQUIERDA – LISTA */}
+    <div className="services-list">
+      <h2 className="font-bold mb-2">Servicios</h2>
+
+      {services.map(service => (
+        <ServiceCard
+          key={service.service_id}
+          title={service.title}
+          price={service.cost}
+          categories={service.categories}
+          image={service.images?.[0]?.image_url}
+          start_time={service.start_time}
+          end_time={service.end_time}
+          rating={Number(service.avg_rating) || 0}
+          reviewCount={service.review_count || 0}
+          distance={2.5}
+          onClick={() => handleSelect(service.service_id)}
         />
-      </div>
+      ))}
     </div>
-  );
+
+    {/* COLUMNA DERECHA – DETALLE */}
+    <div className="service-detail">
+      {selected ? (
+        <ServiceDetailCard service={selected} />
+      ) : (
+        <p className="placeholder">
+          Selecciona un servicio para ver los detalles
+        </p>
+      )}
+    </div>
+
+  </div>
+);
+
+
+
+  
 }

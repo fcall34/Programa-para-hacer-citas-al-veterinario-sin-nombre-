@@ -4,20 +4,35 @@ export const publishService = async (req, res) => {
     try {
     const provider_id = req.user.id;   
 
+    console.log(req.body);
+
+
     const {
       title,
       description,
       cost,
       location,
       available,
-      category_id,
+      start_date,
       expiration_date,
       start_time,
       end_time
     } = req.body;
 
-    if (!title || !description || !cost || !location || !category_id || !expiration_date || !start_time || !end_time) {
+    let { category_ids } = req.body;
+
+    if (!title || !description || !cost || !location || !category_ids || !expiration_date || !start_time || !end_time) {
       return res.status(400).json({ error: "Todos los campos son requeridos" });
+    }
+
+    if (!category_ids || category_ids.length === 0) {
+      return res.status(400).json({ error: "Selecciona al menos una categoría" });
+    }
+
+    if (!start_date || start_date > expiration_date) {
+      return res.status(400).json({
+        error: "La fecha de inicio debe ser menor a la de expiración"
+      });
     }
 
     if (start_time >= end_time) {
@@ -26,32 +41,74 @@ export const publishService = async (req, res) => {
         });
       }
 
+      
+      if (typeof category_ids === "string") {
+        category_ids = [category_ids];
+      }
+      category_ids = category_ids
+        .filter(id => id && id.trim() !== "")
+        .map(id => parseInt(id, 10));
+      if (!category_ids.length) {
+        return res.status(400).json({
+          error: "Debes seleccionar al menos una categoría"
+        });
+      }
+
+
     const pool = await poolPromise;
 
-    await pool.request()
+     const result = await pool.request()
       .input("provider_id", sql.Int, provider_id)
       .input("title", sql.VarChar(100), title)
       .input("description", sql.VarChar(sql.MAX), description)
       .input("cost", sql.Decimal(10, 2), cost)
       .input("location", sql.VarChar(150), location)
       .input("available", sql.Bit, available)
-      .input("category_id", sql.Int, category_id)
       .input("expiration_date", sql.Date, expiration_date)
+      .input("start_date", sql.Date, start_date)
       .input("start_time", sql.VarChar, start_time)
       .input("end_time", sql.VarChar, end_time)
-
       .query(`
         INSERT INTO Services (
           provider_id, title, description, cost, location,
-          available, created_at, category_id, expiration_date, start_time, end_time
+          available, created_at, expiration_date, start_time, end_time, start_date
         )
+        OUTPUT INSERTED.service_id
         VALUES (
           @provider_id, @title, @description, @cost, @location,
-          @available, GETDATE(), @category_id, @expiration_date, @start_time, @end_time
+          @available, GETDATE(), @expiration_date, @start_time, @end_time, @start_date
         )
       `);
 
+       const service_id = result.recordset[0].service_id;
+
+       for (const categoryId of category_ids) {
+          await pool.request()
+            .input("service_id", sql.Int, service_id)
+            .input("category_id", sql.Int, categoryId)
+            .query(`
+              INSERT INTO ServiceCategories (service_id, category_id)
+              VALUES (@service_id, @category_id)
+            `);
+        }
+        console.log("FILES:", req.files.length);
+
+
+       if (req.files && req.files.length > 0) {
+      for (const file of req.files) {
+        await pool.request()
+          .input("service_id", sql.Int, service_id)
+          .input("image_url", sql.VarChar, `/uploads/services/${file.filename}`)
+          .query(`
+            INSERT INTO ServiceImages (service_id, image_url)
+            VALUES (@service_id, @image_url)
+          `);
+      }
+    }
+
     res.json({ message: "Servicio publicado correctamente" });
+
+    const serviceid=result.recordset[0].service_id;
 
   } catch (error) {
     console.error("Error al publicar servicio:", error);

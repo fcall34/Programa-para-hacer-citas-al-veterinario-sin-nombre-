@@ -1,4 +1,5 @@
 import express from "express";
+import { uploadServiceImages } from "../Utils/Multer.js";
 
 /* ================================
    CONTROLADORES CLIENTE
@@ -125,6 +126,7 @@ router.post(
   "/provider/publish",
   verifyToken,
   requireRole(ROLES.PROVIDER),
+  uploadServiceImages.array("images",5),
   publishService
 );
 

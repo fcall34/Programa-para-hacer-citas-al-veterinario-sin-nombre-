@@ -20,6 +20,8 @@ const allowedOrigins = [
   "http://localhost:3001"
 ];
 
+app.use("/uploads", express.static(path.join(__dirname, "Uploads")));
+
 // Middlewares
 app.use(cors({
   origin: allowedOrigins,

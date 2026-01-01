@@ -28,3 +28,5 @@ out/
 .vscode/
 .idea/
 .DS_Store
+
+backend/Uploads

@@ -17,16 +17,31 @@ export const getAllServices = async (req, res) => {
         s.start_time,
         s.end_time,
         s.created_at,
-        c.category_description,
         u.full_name AS provider_name,
 
         -- ⭐ promedio real
         ISNULL(AVG(CAST(r.rating AS FLOAT)), 0) AS avg_rating,
-        COUNT(r.review_id) AS review_count
+        COUNT(DISTINCT r.review_id) AS review_count,
+
+        -- 📌 Categorías (array)
+        (
+          SELECT c.category_description
+          FROM ServiceCategories sc
+          INNER JOIN Category c 
+            ON sc.category_id = c.category_id
+          WHERE sc.service_id = s.service_id
+          FOR JSON PATH
+        ) AS categories,
+
+        -- 🖼️ Imágenes (array)
+        (
+          SELECT si.image_url
+          FROM ServiceImages si
+          WHERE si.service_id = s.service_id
+          FOR JSON PATH
+        ) AS images
 
       FROM Services s
-      LEFT JOIN Category c 
-        ON s.category_id = c.category_id
       LEFT JOIN Users u 
         ON s.provider_id = u.user_id
       LEFT JOIN Appointments a
@@ -46,13 +61,14 @@ export const getAllServices = async (req, res) => {
         s.start_time,
         s.end_time,
         s.created_at,
-        c.category_description,
         u.full_name
 
       ORDER BY s.created_at DESC
     `;
 
     const result = await pool.request().query(query);
+
+    const response = result.recordset[0];
 
     res.json({
       success: true,
@@ -64,8 +80,6 @@ export const getAllServices = async (req, res) => {
     res.status(500).json({ error: "Error en el servidor" });
   }
 };
-
-
 
 
 export const getServiceById = async (req, res) => {
@@ -83,15 +97,27 @@ export const getServiceById = async (req, res) => {
         s.location,
         s.start_time,
         s.end_time,
-        c.category_description,
         u.full_name AS provider_name,
 
         ISNULL(AVG(CAST(r.rating AS FLOAT)), 0) AS avg_rating,
-        COUNT(r.review_id) AS review_count
+        COUNT(r.review_id) AS review_count,
+
+        (
+          SELECT c.category_description
+          FROM ServiceCategories sc
+          JOIN Category c ON sc.category_id = c.category_id
+          WHERE sc.service_id = s.service_id
+          FOR JSON PATH
+        ) AS categories,
+
+        (
+          SELECT si.image_url
+          FROM ServiceImages si
+          WHERE si.service_id = s.service_id
+          FOR JSON PATH
+        ) AS images
 
       FROM Services s
-      LEFT JOIN Category c 
-        ON s.category_id = c.category_id
       LEFT JOIN Users u 
         ON s.provider_id = u.user_id
       LEFT JOIN Appointments a
@@ -111,7 +137,6 @@ export const getServiceById = async (req, res) => {
         s.location,
         s.start_time,
         s.end_time,
-        c.category_description,
         u.full_name
     `;
 
@@ -121,7 +146,7 @@ export const getServiceById = async (req, res) => {
       .query(query);
 
     if (result.recordset.length === 0) {
-      return res.status(404).json({ error: "Servicio no encontrado" });
+      return res.status(404).json({ success: false, message: "Servicio no encontrado" });
     }
 
     res.json({
@@ -131,6 +156,6 @@ export const getServiceById = async (req, res) => {
 
   } catch (error) {
     console.error("Error getServiceById:", error);
-    res.status(500).json({ error: "Error en el servidor" });
+    res.status(500).json({ success: false, message: "Error en el servidor" });
   }
 };

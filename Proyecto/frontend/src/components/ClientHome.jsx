@@ -18,6 +18,19 @@ export default function HomeClient() {
   const [view, setView] = useState('services');
 
   useEffect(() => {
+  if (selectedService) {
+    document.body.style.overflow = "hidden";
+  } else {
+    document.body.style.overflow = "auto";
+  }
+
+  return () => {
+    document.body.style.overflow = "auto";
+  };
+}, [selectedService]);
+
+
+  useEffect(() => {
     const fetchServices = async () => {
       try {
         const token = localStorage.getItem("token");
@@ -35,9 +48,20 @@ export default function HomeClient() {
         console.log("SERVICIOS:", data.data);
 
         if (data.success) {
-          setServices(data.data);
-          setSelectedService(data.data[0]); // seleccionar el primero por default
-        }
+            const parsed = data.data.map(service => ({
+              ...service,
+              categories: service.categories
+                ? JSON.parse(service.categories)
+                : [],
+              images: service.images
+                ? JSON.parse(service.images)
+                : []
+            }));
+
+            setServices(parsed);
+           
+          }
+
 
       } catch (err) {
         console.error("Error trayendo servicios:", err);
@@ -47,6 +71,38 @@ export default function HomeClient() {
 
     fetchServices();
   }, []);
+
+
+  const handleSelect = async (id) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const res = await fetch(`${API_URL}/api/services/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      const parsed = {
+        ...data.data,
+        categories: data.data.categories
+          ? JSON.parse(data.data.categories)
+          : [],
+        images: data.data.images
+          ? JSON.parse(data.data.images)
+          : []
+      };
+
+      setSelectedService(parsed);
+    }
+  } catch (error) {
+    console.error("Error al seleccionar servicio:", error);
+  }
+};
+
 
   if (loading) return <p className="loading">Cargando servicios...</p>;
 
@@ -68,32 +124,26 @@ export default function HomeClient() {
           <div className="left-column">
             {services.map(service => (
               <ServiceCard
-                key={service.service_id}
-                title={service.title}
-                price={`$${service.cost}`}
-                category={service.category_description ?? "Sin categoría"}
-                start_time={service.start_time}
-                end_time={service.end_time}
-                distance="--"
-                rating={5}
-                onClick={() => setSelectedService(service)}
-              />
+                  key={service.service_id}
+                  title={service.title}
+                  price={service.cost}
+                  categories={service.categories}
+                  image={service.images?.[0]?.image_url}
+                  start_time={service.start_time}
+                  end_time={service.end_time}
+                  rating={Number(service.avg_rating) || 0}
+                  reviewCount={service.review_count || 0}
+                  distance={2.5}
+                  onClick={() => handleSelect(service.service_id)}
+                />
             ))}
           </div>
 
-          <div className="right-column">
-            {selectedService ? (
-              <ServiceDetailCard
-                service={selectedService}
-                onOpenSchedule={() => setShowSchedule(true)}
-              />
-            ) : (
-              <p className="no-service">Selecciona un servicio para ver detalles</p>
-            )}
-          </div>
 
         </div>
       </div>
+
+      
     )}
 
     {view === "appointments" && (
@@ -111,6 +161,24 @@ export default function HomeClient() {
         onClose={() => setShowSchedule(false)}
       />
     )}
+
+
+
+    {selectedService && (
+  <div className="service-overlay" onClick={() => setSelectedService(null)}>
+    <div
+      className="service-modal"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <ServiceDetailCard
+        service={selectedService}
+        onClose={() => setSelectedService(null)}
+        onOpenSchedule={() => setShowSchedule(true)}
+      />
+    </div>
+  </div>
+)}
+
 
   </div>
 );
