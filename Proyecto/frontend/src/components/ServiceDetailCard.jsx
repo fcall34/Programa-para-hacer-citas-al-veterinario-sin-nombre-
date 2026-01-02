@@ -11,7 +11,7 @@ function formatTime(timeValue) {
   return `${match[1]}:${match[2]}`;
 }
 
-export default function ServiceDetailCard({ service, onClose }) {
+export default function ServiceDetailCard({ service, onClose, onOpenSchedule }) {
   const [currentImage, setCurrentImage] = useState(0);
 
   const images = service.images || [];
@@ -100,7 +100,7 @@ export default function ServiceDetailCard({ service, onClose }) {
           {service.description}
         </p>
 
-        <button className="book-btn">
+        <button className="book-btn" onClick={onOpenSchedule}>
           Agendar cita
         </button>
       </div>

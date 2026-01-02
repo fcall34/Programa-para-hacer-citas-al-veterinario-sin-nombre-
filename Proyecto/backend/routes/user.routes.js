@@ -10,7 +10,7 @@ from "../Controllers/Client.Controllers.js";
 /* ================================
    CONTROLADORES CITAS
    ================================ */
-import { createAppointment, getAppointments, getAcceptedAppointmentsByProvider, completeAppointment } 
+import { createAppointment, getAppointments, getAcceptedAppointmentsByProvider, completeAppointment, getServiceAvailability } 
 from "../Controllers/Appointment.Controllers.js";
 
 /* ================================
@@ -60,6 +60,9 @@ const router = express.Router();
 router.get("/provider/misreviews",verifyToken, requireRole(ROLES.PROVIDER), getProviderReviews);
 router.get("/provider/stats",verifyToken,requireRole(ROLES.PROVIDER),getProviderStats);
 router.get("/provider/misservicios", verifyToken, requireRole(ROLES.PROVIDER), getMyServices);
+router.get("/appointments/availability/:service_id", verifyToken, requireRole(ROLES.CLIENT), getServiceAvailability )
+
+
 
 
 /* ================================

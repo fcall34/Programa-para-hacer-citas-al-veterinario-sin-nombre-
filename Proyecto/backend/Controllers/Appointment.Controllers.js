@@ -35,7 +35,12 @@ export const createAppointment = async (req, res) => {
     const serviceRes = await pool.request()
       .input("service_id", sql.Int, service_id)
       .query(`
-        SELECT provider_id, title, expiration_date, start_time, end_time
+        SELECT provider_id,
+            title,
+            start_date,
+            expiration_date,
+            start_time,
+            end_time
         FROM dbo.Services
         WHERE service_id = @service_id
       `);
@@ -321,5 +326,61 @@ export const completeAppointment = async (req, res) => {
   }
 };
 
+
+
+export const getServiceAvailability = async (req, res) => {
+  try {
+
+    const toHHMM = (date) => {
+      return date.toISOString().substring(11, 16);
+    };
+    const { service_id } = req.params;
+    const { date } = req.query;
+
+    const pool = await poolPromise;
+
+    // Obtener horario del servicio
+    const serviceRes = await pool.request()
+      .input("service_id", sql.Int, service_id)
+      .query(`
+        SELECT start_time, end_time
+        FROM dbo.Services
+        WHERE service_id = @service_id
+      `);
+
+    if (serviceRes.recordset.length === 0) {
+      return res.status(404).json({ success: false });
+    }
+
+    const { start_time, end_time } = serviceRes.recordset[0];
+
+    // Citas ya ocupadas ese día
+    const appointmentsRes = await pool.request()
+      .input("service_id", sql.Int, service_id)
+      .input("date", sql.Date, date)
+      .query(`
+        SELECT Appointment_time
+        FROM dbo.Appointments
+        WHERE service_id = @service_id
+          AND CAST(Appointment_date AS DATE) = @date
+      `);
+
+    const bookedTimes = appointmentsRes.recordset.map(
+      a => a.Appointment_time.substring(0,5)
+    );
+
+    return res.json({
+      success: true,
+      start_time: toHHMM(start_time),
+      end_time: toHHMM(end_time),
+      bookedTimes
+    });
+
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false });
+  }
+};
 
 

@@ -97,6 +97,8 @@ export const getServiceById = async (req, res) => {
         s.location,
         s.start_time,
         s.end_time,
+        s.start_date,
+        s.expiration_date,
         u.full_name AS provider_name,
 
         ISNULL(AVG(CAST(r.rating AS FLOAT)), 0) AS avg_rating,
@@ -137,6 +139,8 @@ export const getServiceById = async (req, res) => {
         s.location,
         s.start_time,
         s.end_time,
+        s.start_date,
+        s.expiration_date,
         u.full_name
     `;
 
