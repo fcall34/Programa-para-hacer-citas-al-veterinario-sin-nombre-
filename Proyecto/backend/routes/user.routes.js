@@ -151,7 +151,7 @@ router.put("/provider/complete",verifyToken,requireRole(ROLES.PROVIDER),complete
 
 
 router.delete("/services/:id",verifyToken,requireRole(ROLES.PROVIDER),deleteService);
-router.put("/services/:id",verifyToken,requireRole(ROLES.PROVIDER),updateService);
+router.put("/services/:id",verifyToken,requireRole(ROLES.PROVIDER), uploadServiceImages.array("images", 5), updateService);
 
 
 

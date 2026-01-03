@@ -273,39 +273,54 @@ export const getMyServices = async (req, res) => {
 
     const result = await pool.request()
       .input("provider_id", sql.Int, provider_id)
-      .query(`
-        SELECT
-          s.service_id,
-          s.title,
-          s.description,
-          s.cost,
-          s.location,
-          s.available,
-          s.category_id,
-          c.category_description,
-          CONVERT(varchar(10), s.created_at, 120) AS created_at,
-          CONVERT(varchar(10), s.expiration_date, 120) AS expiration_date,
-          s.start_time,
-          s.end_time
-        FROM Services s
-        LEFT JOIN Category c ON s.category_id = c.category_id
-        WHERE s.provider_id = @provider_id
-        ORDER BY s.created_at DESC
-      `);
+      .query(`SELECT 
+            s.service_id,
+            s.title,
+            s.description,
+            s.cost,
+            s.location,
+            s.available,
+            s.start_time,
+            s.end_time,
+            s.start_date,
+            s.expiration_date,
 
-    return res.json({
+
+            (
+              SELECT c.category_description
+              FROM ServiceCategories sc
+              JOIN Category c ON sc.category_id = c.category_id
+              WHERE sc.service_id = s.service_id
+              FOR JSON PATH
+            ) AS categories,
+
+
+            (
+              SELECT si.image_url
+              FROM ServiceImages si
+              WHERE si.service_id = s.service_id
+              FOR JSON PATH
+            ) AS images
+
+          FROM Services s
+          WHERE s.provider_id = @provider_id
+          ORDER BY s.created_at DESC;
+          `);
+
+    res.json({
       success: true,
       data: result.recordset
     });
 
-  } catch (error) {
-    console.error("Error getMyServices:", error);
-    return res.status(500).json({
-      success: false,
-      message: "Error interno del servidor"
-    });
+  } catch (err) {
+    console.error("Error getMyServices:", err);
+    res.status(500).json({ success: false });
   }
 };
+
+
+import fs from "fs";
+import path from "path";
 
 export const updateService = async (req, res) => {
   try {
@@ -316,18 +331,25 @@ export const updateService = async (req, res) => {
       title,
       description,
       cost,
-      location,
-      available,
-      category_id,
-      expiration_date,
+      start_date,
       start_time,
-      end_time
+      end_time,
+      available,
+      deletedImages
     } = req.body;
 
-    if (!title || !description || !cost || !category_id || !start_time || !end_time) {
+    const parsedCost = cost ? Number(cost) : null;
+  const parsedAvailable = available === "true" || available === true || available === "on";
+  const categories = req.body["categories[]"] || req.body.categories;
+  const cats = Array.isArray(categories) ? categories : categories ? [categories] : [];
+
+
+
+
+    if (!title || !description) {
       return res.status(400).json({
         success: false,
-        message: "Faltan datos obligatorios"
+        message: "Título y descripción son obligatorios"
       });
     }
 
@@ -340,6 +362,7 @@ export const updateService = async (req, res) => {
 
     const pool = await poolPromise;
 
+    /* 🔐 Verificar dueño */
     const check = await pool.request()
       .input("service_id", sql.Int, id)
       .input("provider_id", sql.Int, provider_id)
@@ -357,31 +380,84 @@ export const updateService = async (req, res) => {
       });
     }
 
+    /* 📝 Actualizar servicio */
     await pool.request()
       .input("service_id", sql.Int, id)
       .input("title", sql.VarChar(100), title)
       .input("description", sql.VarChar(sql.MAX), description)
       .input("cost", sql.Decimal(10, 2), cost)
-      .input("location", sql.VarChar(150), location)
-      .input("available", sql.Bit, available)
-      .input("category_id", sql.Int, category_id)
-      .input("expiration_date", sql.Date, expiration_date)
-      .input("start_time", sql.VarChar, start_time)
-      .input("end_time", sql.VarChar, end_time)
+      .input("start_date", sql.Date, start_date || null)
+      .input("available", sql.Bit, available === "true" || available === true)
+      .input("start_time", sql.VarChar(5), start_time)
+      .input("end_time", sql.VarChar(5), end_time)
       .query(`
         UPDATE Services
         SET
           title = @title,
           description = @description,
           cost = @cost,
-          location = @location,
+          start_date = @start_date,
           available = @available,
-          category_id = @category_id,
-          expiration_date = @expiration_date,
           start_time = @start_time,
           end_time = @end_time
         WHERE service_id = @service_id
       `);
+
+    /* 🏷️ Actualizar categorías */
+    await pool.request()
+      .input("service_id", sql.Int, id)
+      .query(`DELETE FROM ServiceCategories WHERE service_id = @service_id`);
+
+    if (categories) {
+      const cats = Array.isArray(categories) ? categories : [categories];
+
+      for (const cat of cats) {
+        await pool.request()
+          .input("service_id", sql.Int, id)
+          .input("category_description", sql.VarChar(100), cat)
+          .query(`
+            INSERT INTO ServiceCategories (service_id, category_id)
+            SELECT @service_id, category_id
+            FROM Category
+            WHERE category_description = @category_description
+          `);
+      }
+    }
+
+    /* ❌ Eliminar imágenes */
+    if (deletedImages) {
+      const imgs = Array.isArray(deletedImages) ? deletedImages : [deletedImages];
+
+      for (const img of imgs) {
+        const filePath = path.join("Uploads/services", path.basename(img));
+
+        if (fs.existsSync(filePath)) {
+          fs.unlinkSync(filePath);
+        }
+
+        await pool.request()
+          .input("service_id", sql.Int, id)
+          .input("image_url", sql.VarChar(255), img)
+          .query(`
+            DELETE FROM ServiceImages
+            WHERE service_id = @service_id
+              AND image_url = @image_url
+          `);
+      }
+    }
+
+    /* ➕ Agregar nuevas imágenes */
+    if (req.files?.length) {
+      for (const file of req.files) {
+        await pool.request()
+          .input("service_id", sql.Int, id)
+          .input("image_url", sql.VarChar(255), `/Uploads/services/${file.filename}`)
+          .query(`
+            INSERT INTO ServiceImages (service_id, image_url)
+            VALUES (@service_id, @image_url)
+          `);
+      }
+    }
 
     res.json({
       success: true,
@@ -396,6 +472,7 @@ export const updateService = async (req, res) => {
     });
   }
 };
+
 
 
 export const deleteService = async (req, res) => {

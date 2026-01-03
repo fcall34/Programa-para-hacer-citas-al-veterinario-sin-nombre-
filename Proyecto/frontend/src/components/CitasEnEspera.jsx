@@ -70,10 +70,10 @@ export default function CitasEnEspera() {
     }
   };
 
-  // 🔵 Cambiar estado
+  
   const cambiarEstado = async (appointmentId, status) => {
     try {
-      // Asegurar tipo numérico
+ 
       const idNum = Number(appointmentId);
       setProcessingId(idNum);
 
@@ -111,15 +111,12 @@ export default function CitasEnEspera() {
     }
   };
 
-  // 🔵 Formato fecha YYYY-MM-DD
   const formatearFecha = (fecha) => {
     if (!fecha) return "";
-    // fecha viene como "2025-01-25"
+
     const [anio, mes, dia] = fecha.split("-");
     return `${dia}/${mes}/${anio}`;
   };
-
-  // 🔵 Formato hora HH:mm:ss (mantengo tu lógica para appointment_time)
   const formatearHora = (fechaIso) => {
     if (!fechaIso) return "";
     const fecha = new Date(fechaIso);

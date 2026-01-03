@@ -85,3 +85,16 @@
   font-weight: 600;
   margin-left: 5px;
 }
+
+.error-text {
+  color: #ff4d4d;
+  font-size: 0.8rem;
+  margin-top: -10px;
+  margin-bottom: 10px;
+  display: block;
+  text-align: left;
+}
+
+.input-error {
+  border: 1px solid #ff4d4d !important;
+}
